@@ -93,3 +93,235 @@ input#search {
   font-size: 1.2rem;
   color: #888;
 }
+
+/* Themed Pokedex Card Styles */
+:root {
+  --primary-glow: #4ade80;
+  --glass-bg: rgba(17, 35, 53, 0.85);
+  --dark-base: #0a1016;
+  --tech-blue: #1d334a;
+  --text-main: #e2e8f0;
+}
+
+.pokedex-card {
+  width: 380px;
+  background: linear-gradient(160deg, #162a3f 0%, #0d1926 100%);
+  border: 2px solid #2a4a69;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow:
+    0 0 20px rgba(74, 222, 128, 0.1),
+    inset 0 0 30px rgba(0,0,0,0.5);
+  position: relative;
+  overflow: hidden;
+  color: var(--text-main);
+}
+
+.pokedex-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image:
+    linear-gradient(rgba(74, 222, 128, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74, 222, 128, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.pokedex-card .header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+  border-bottom: 1px solid #2a4a69;
+  padding-bottom: 10px;
+}
+
+.pokedex-card .pokeball-icon {
+  width: 24px;
+  height: 24px;
+  background: radial-gradient(circle at 30% 30%, #fff, #ff5555);
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 5px #ff5555;
+}
+
+.pokedex-card h1 {
+  font-family: 'Orbitron', sans-serif;
+  color: white;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+}
+
+.pokedex-card .display-area {
+  position: relative;
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.pokedex-card .holo-circle {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border: 2px solid var(--primary-glow);
+  border-radius: 50%;
+  box-shadow: 0 0 15px var(--primary-glow), inset 0 0 15px var(--primary-glow);
+  opacity: 0.6;
+  animation: pulse 4s infinite ease-in-out;
+}
+
+.pokedex-card .holo-circle::after {
+  content: '';
+  position: absolute;
+  top: -10px; left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 110%;
+  border-left: 2px dashed var(--primary-glow);
+  border-right: 2px dashed var(--primary-glow);
+  border-radius: 50%;
+  animation: spin 10s linear infinite;
+}
+
+.pokedex-card .pokemon-img {
+  width: 200px;
+  height: 200px;
+  z-index: 2;
+  filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+  transition: transform 0.3s ease;
+}
+.pokedex-card .pokemon-img:hover { transform: scale(1.1); }
+
+.pokedex-card .info-panel {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background: rgba(10, 20, 30, 0.8);
+  border: 1px solid var(--primary-glow);
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  backdrop-filter: blur(4px);
+  z-index: 3;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.pokedex-card .info-row { margin-bottom: 5px; }
+.pokedex-card .type-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.7rem;
+  margin-left: 2px;
+}
+.type-grass { background: #78C850; color: #000; }
+.type-poison { background: #A040A0; color: #fff; }
+.type-fire { background: #F08030; color: #000; }
+.type-water { background: #6890F0; color: #000; }
+.type-electric { background: #F8D030; color: #000; }
+.type-ice { background: #98D8D8; color: #000; }
+.type-fighting { background: #C03028; color: #fff; }
+.type-ground { background: #E0C068; color: #000; }
+.type-flying { background: #A890F0; color: #000; }
+.type-psychic { background: #F85888; color: #000; }
+.type-bug { background: #A8B820; color: #000; }
+.type-rock { background: #B8A038; color: #000; }
+.type-ghost { background: #705898; color: #fff; }
+.type-dragon { background: #7038F8; color: #fff; }
+.type-dark { background: #705848; color: #fff; }
+.type-steel { background: #B8B8D0; color: #000; }
+.type-fairy { background: #EE99AC; color: #000; }
+.type-normal { background: #A8A878; color: #000; }
+
+.pokedex-card .stats-box {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 10px;
+  border: 1px solid #2a4a69;
+  position: relative;
+  z-index: 1;
+}
+.pokedex-card .stat-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #b0c4de;
+}
+.pokedex-card .stat-label { width: 60px; font-weight: bold; }
+.pokedex-card .bar-container {
+  flex-grow: 1;
+  height: 8px;
+  background: #112335;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0 10px;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.8);
+}
+.pokedex-card .bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #225533, var(--primary-glow));
+  border-radius: 4px;
+  box-shadow: 0 0 10px var(--primary-glow);
+  width: 0%;
+  animation: fillBar 1.5s ease-out forwards;
+}
+.pokedex-card .stat-value { width: 32px; text-align: right; font-weight: bold; color: white; }
+
+.pokedex-card .footer {
+  margin-top: 20px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.pokedex-card .close-btn {
+  background: linear-gradient(180deg, #2a4a69, #162a3f);
+  border: 1px solid #4ade80;
+  color: white;
+  padding: 8px 30px;
+  border-radius: 20px;
+  font-family: 'Orbitron', sans-serif;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  transition: all 0.3s;
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.2);
+}
+.pokedex-card .close-btn:hover {
+  background: #4ade80;
+  color: #000;
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.6);
+}
+
+@keyframes pulse {
+  0% { opacity: 0.4; box-shadow: 0 0 10px var(--primary-glow); }
+  50% { opacity: 0.7; box-shadow: 0 0 20px var(--primary-glow); }
+  100% { opacity: 0.4; box-shadow: 0 0 10px var(--primary-glow); }
+}
+@keyframes spin {
+  from { transform: translateX(-50%) rotate(0deg); }
+  to { transform: translateX(-50%) rotate(360deg); }
+}
+@keyframes fillBar { from { width: 0%; } }
+
+
+/* Scrollbar Styling */
+.scroll-list::-webkit-scrollbar {
+  width: 8px;   
+}
+.scroll-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+
+}
+

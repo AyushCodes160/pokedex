@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,6 +9,40 @@
   <body>
     <header>
       <h1>Pokedex</h1>
+      <!-- Theme toggle switch: accessible, top-right -->
+      <div class="theme-toggle" role="presentation">
+        <input
+          type="checkbox"
+          id="theme-toggle"
+          class="toggle-input"
+          aria-label="Toggle dark/light mode"
+        />
+        <label for="theme-toggle" class="toggle-switch">
+          <!-- Inline open-source icons (replace with Flaticon if desired) -->
+          <span class="icon sun" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              width="16"
+              height="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Zm0-16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1Zm0 18a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1Zm10-9a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1ZM5 12a1 1 0 0 1-1 1H2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1Zm12.95 6.364a1 1 0 0 1-1.414 1.414l-1.414-1.414a1 1 0 0 1 1.414-1.414l1.414 1.414ZM8.878 6.636a1 1 0 0 1-1.414-1.414L8.878 3.808a1 1 0 1 1 1.414 1.414L8.878 6.636Zm8.657-3.535a1 1 0 1 1 1.414 1.414l-1.414 1.414a1 1 0 1 1-1.414-1.414l1.414-1.414ZM5.05 17.95a1 1 0 0 1-1.414-1.414l1.414-1.414a1 1 0 1 1 1.414 1.414L5.05 17.95Z"
+              />
+            </svg>
+          </span>
+          <span class="icon moon" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              width="16"
+              height="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z" />
+            </svg>
+          </span>
+        </label>
+      </div>
     </header>
     <main class="pokedex-layout">
       <section class="sidebar">

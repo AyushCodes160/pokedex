@@ -5,6 +5,24 @@ const searchInput = document.getElementById("search");
 let allPokemon = [];
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // Theme: restore preference and attach toggle (checkbox)
+  const themeToggle = /** @type {HTMLInputElement|null} */ (
+    document.getElementById("theme-toggle")
+  );
+  const savedTheme = localStorage.getItem("theme");
+  const prefersDark = savedTheme === "dark";
+  if (prefersDark) {
+    document.body.classList.add("dark-mode");
+  }
+  if (themeToggle) {
+    themeToggle.checked = prefersDark;
+    themeToggle.addEventListener("change", () => {
+      const isDark = themeToggle.checked;
+      document.body.classList.toggle("dark-mode", isDark);
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+    });
+  }
+
   const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1025");
   const data = await res.json();
   allPokemon = data.results;
@@ -101,5 +119,4 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-
-// for light mode and dark mode in the web page we need to write the code in he file name public/main.css
+// Theme handling implemented above using a header button and body.dark-mode class

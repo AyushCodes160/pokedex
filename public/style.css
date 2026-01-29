@@ -12,6 +12,7 @@ header {
   letter-spacing: 2px;
   font-size: 2rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  position: relative;
 }
 .pokedex-layout {
   display: flex;
@@ -324,4 +325,111 @@ input#search {
   border-radius: 4px;
 
 }
+
+
+.scroll-list::-webkit-scrollbar-thumb{
+  background: #888;
+  border-radius: 4px;
+}
+
+/* dark and light mode  */
+body.dark-mode {
+  background: #121212;
+  color: #e0e0e0;
+}
+body.dark-mode .sidebar {
+  background: #1e1e1e;
+}
+body.dark-mode input#search {
+  background: #333;
+  color: #e0e0e0;
+}
+body.dark-mode .pokemon-card {
+  background: #1e1e1e;
+  color: #e0e0e0;
+}
+body.dark-mode .pokemon-card:hover {
+  background: #333;
+  color: #fff;
+}
+body.dark-mode .mainview {
+  background: #121212;
+}
+body.dark-mode .details {
+  background: #1e1e1e;
+}
+body.dark-mode .model-3d {
+  background: #1a1a1a;
+}
+
+/* Theme toggle switch styling */
+.theme-toggle {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  display: inline-block;
+  height: 28px;
+}
+.toggle-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.toggle-switch {
+  width: 52px;
+  height: 28px;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 999px;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.toggle-switch .icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  opacity: 1;
+}
+.toggle-switch .icon svg { display: block; }
+.toggle-switch .icon.sun { left: 6px; }
+.toggle-switch .icon.moon { right: 6px; opacity: 0.5; }
+.toggle-switch::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  background: #111;
+  border-radius: 50%;
+  transition: transform 200ms ease, background-color 200ms ease;
+}
+.toggle-input:checked + .toggle-switch {
+  background: #333;
+  border-color: rgba(255,255,255,0.2);
+}
+.toggle-input:checked + .toggle-switch::before {
+  transform: translate(26px, -50%);
+  background: #e0e0e0;
+}
+.toggle-input:checked + .toggle-switch .icon.sun { opacity: 0.5; }
+.toggle-input:checked + .toggle-switch .icon.moon { opacity: 1; }
+
+/* Smooth theme transition for key elements */
+body, header, .sidebar, .pokemon-card, .details, .model-3d, input#search {
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+/* Dark header to match theme */
+body.dark-mode header {
+  background: #1e1e1e;
+  color: #e0e0e0;
+}
+
 

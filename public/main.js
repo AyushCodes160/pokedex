@@ -5,10 +5,7 @@ const searchInput = document.getElementById("search");
 let allPokemon = [];
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // Theme: restore preference and attach toggle (checkbox)
-  const themeToggle = /** @type {HTMLInputElement|null} */ (
-    document.getElementById("theme-toggle")
-  );
+  const themeToggle = document.getElementById("theme-toggle");
   const savedTheme = localStorage.getItem("theme");
   const prefersDark = savedTheme === "dark";
   if (prefersDark) {
@@ -118,5 +115,3 @@ searchInput.addEventListener("input", (e) => {
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
-
-// Theme handling implemented above using a header button and body.dark-mode class

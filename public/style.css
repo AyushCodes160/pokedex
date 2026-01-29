@@ -94,8 +94,6 @@ input#search {
   font-size: 1.2rem;
   color: #888;
 }
-
-/* Themed Pokedex Card Styles */
 :root {
   --primary-glow: #4ade80;
   --glass-bg: rgba(17, 35, 53, 0.85);
@@ -316,7 +314,6 @@ input#search {
 @keyframes fillBar { from { width: 0%; } }
 
 
-/* Scrollbar Styling */
 .scroll-list::-webkit-scrollbar {
   width: 8px;   
 }
@@ -332,7 +329,6 @@ input#search {
   border-radius: 4px;
 }
 
-/* dark and light mode  */
 body.dark-mode {
   background: #121212;
   color: #e0e0e0;
@@ -362,7 +358,6 @@ body.dark-mode .model-3d {
   background: #1a1a1a;
 }
 
-/* Theme toggle switch styling */
 .theme-toggle {
   position: absolute;
   top: 0.75rem;

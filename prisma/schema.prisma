@@ -7,26 +7,25 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
 }
 
 model Team {
-  id         Int          @id @default(autoincrement())
-  name       String
-  ownerName  String?
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  pokemons   TeamPokemon[]
+  id        Int           @id @default(autoincrement())
+  name      String
+  ownerName String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  pokemons  TeamPokemon[]
 }
 
 model TeamPokemon {
-  id         Int      @id @default(autoincrement())
-  teamId     Int
-  team       Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  slot       Int      // 1..6
-  speciesId  Int      // Pokedex ID
-  nature     String   // e.g., Adamant, Modest, etc.
-  moves      Json     // up to 4 moves as array of strings
+  id        Int    @id @default(autoincrement())
+  teamId    Int
+  team      Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  slot      Int // 1..6
+  speciesId Int // Pokedex ID
+  nature    String // e.g., Adamant, Modest, etc.
+  moves     Json // up to 4 moves as array of strings
 
   @@unique([teamId, slot]) // enforce one pokemon per slot
 }

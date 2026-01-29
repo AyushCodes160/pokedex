@@ -47,9 +47,8 @@ This project is a full-featured Pokédex web application that displays informati
   - Use three.js loaders for glTF/OBJ files
 
 ## 6. Deployment
-- GitHub Pages: Deployed via workflow `.github/workflows/pages.yml` that uploads `public/` on each push to `main`. Expected URL: `https://ayushcodes160.github.io/pokedex/`.
 - Local: Run server and open frontend
-- Cloud: Netlify or Vercel with publish directory set to `public/`.
+- Cloud: Deploy on Vercel, Heroku, or similar
 
 ## 7. Study Resources
 - [MDN REST API Guide](https://developer.mozilla.org/en-US/docs/Glossary/REST)

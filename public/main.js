@@ -7,7 +7,10 @@ let allPokemon = [];
 document.addEventListener("DOMContentLoaded", async () => {
   const themeToggle = document.getElementById("theme-toggle");
   const savedTheme = localStorage.getItem("theme");
-  const prefersDark = savedTheme === "dark";
+  const prefersDark = savedTheme
+    ? savedTheme === "dark"
+    : window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
   if (prefersDark) {
     document.body.classList.add("dark-mode");
   }
@@ -46,49 +49,80 @@ function renderPokemonList(list) {
 async function showPokemonDetails(id, name) {
   const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
   const data = await res.json();
-  const typesBadges = data.types
-    .map((t) => {
-      const typeName = t.type.name.toLowerCase();
-      return `<span class="type-badge type-${typeName}">${capitalize(typeName)}</span>`;
-    })
-    .join(" ");
-
-  const statsRows = data.stats
-    .map((s) => {
-      const label = capitalize(s.stat.name);
-      const val = s.base_stat;
-      const pct = Math.min(100, Math.round((val / 255) * 100));
-      return `
-      <div class="stat-row">
-        <span class="stat-label">${label}</span>
-        <div class="bar-container"><div class="bar-fill" style="width: ${pct}%"></div></div>
-        <span class="stat-value">${val}</span>
-      </div>`;
-    })
-    .join("");
+  const typeLabels = data.types.map((t) => t.type.name.toUpperCase());
+  const baseExp = data.base_experience ?? "—";
 
   pokemonDetails.style.display = "block";
   pokemonDetails.innerHTML = `
-    <div class="pokedex-card">
-      <div class="header">
-        <div class="pokeball-icon"></div>
-        <h1>${capitalize(name)}</h1>
-      </div>
-      <div class="display-area">
-        <div class="holo-circle"></div>
-        <img class="pokemon-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png" alt="${name}" />
-        <div class="info-panel">
-          <div class="info-row"><strong>ID:</strong> #${id}</div>
-          <div class="info-row"><strong>Types:</strong> ${typesBadges}</div>
-          <div class="info-row"><strong>Height:</strong> ${data.height / 10} m</div>
-          <div class="info-row"><strong>Weight:</strong> ${data.weight / 10} kg</div>
+    <div class="summary-card">
+      <div class="summary-diagonal"></div>
+      <div class="summary-content">
+        <div class="summary-left">
+          <div class="summary-tabs">
+            <span class="chevron">‹</span>
+            <div class="icons-row">
+              <span class="circle-icon"></span>
+              <span class="mini-icon">⏱</span>
+              <span class="mini-icon">★</span>
+              <span class="mini-icon">📄</span>
+              <span class="mini-icon">🏆</span>
+            </div>
+            <span class="chevron">›</span>
+          </div>
+
+          <div class="summary-table">
+            <div class="summary-row alt"><span class="label">Name</span><span class="value bold">${capitalize(name)}</span></div>
+            <div class="summary-row"><span class="label">Type</span><span class="value"><span class="type-pill">${typeLabels.join(" / ")}</span></span></div>
+            <div class="summary-row"><span class="label">ID No.</span><span class="value bold">${id}</span></div>
+            <div class="summary-row alt"><span class="label">Current no. of Exp. Points</span><span class="value bold">${baseExp}</span></div>
+
+            <div class="exp-section">
+              <div class="exp-total"></div>
+              <div class="exp-needed">
+                <div class="exp-track"><div class="exp-fill" style="width: 60%"></div></div>
+              </div>
+            </div>
+
+            <div class="markings">
+              <div class="play-icon">▶</div>
+              <div class="marks">● ▲ ■ ◆ ♥ ★</div>
+            </div>
+
+            <div class="held-item">
+              <div class="held-header">
+                <span class="held-label">Held Item</span>
+                <div class="held-meta">
+                  <div class="held-dot"></div>
+                  <span class="held-name">Miracle Seed</span>
+                </div>
+              </div>
+              <p class="held-desc">An item to be held by a Pokémon. It's a seed imbued with life-force that boosts the power of Grass-type moves.</p>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="stats-box">
-        ${statsRows}
-      </div>
-      <div class="footer">
-        <button class="close-btn" onclick="pokemonDetails.style.display='none'">Close</button>
+
+        <div class="summary-right">
+          <div class="topbar">
+            <div class="topbar-inner">
+              <div class="left">
+                <div class="orange-dot"></div>
+                <span class="name">${capitalize(name)}</span>
+              </div>
+              <div class="right">
+                <span class="gender">♂</span>
+              </div>
+            </div>
+          </div>
+          <div class="image-wrap">
+            <div class="circle-bg"></div>
+            <img class="summary-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png" alt="${name}" />
+          </div>
+          <div class="footer-controls">
+            <div class="key-label"><span class="key">A</span> Held Item</div>
+            <div class="key-label"><span class="key">X</span> Change Markings</div>
+            <button class="key-label" onclick="pokemonDetails.style.display='none'"><span class="key">B</span> Back</button>
+          </div>
+        </div>
       </div>
     </div>
   `;

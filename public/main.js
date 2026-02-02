@@ -117,11 +117,6 @@ async function showPokemonDetails(id, name) {
             <div class="circle-bg"></div>
             <img class="summary-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png" alt="${name}" />
           </div>
-          <div class="footer-controls">
-            <div class="key-label"><span class="key">A</span> Held Item</div>
-            <div class="key-label"><span class="key">X</span> Change Markings</div>
-            <button class="key-label" onclick="pokemonDetails.style.display='none'"><span class="key">B</span> Back</button>
-          </div>
         </div>
       </div>
     </div>

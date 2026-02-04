@@ -1257,9 +1257,7 @@ body.dark-mode header {
     height: 8px;
   }
 
-  .s-fill {
-    /* Keep existing colorful classes but maybe brighten them? */
-  }
+
 
   /* Logout floating top right */
   #logout-btn {

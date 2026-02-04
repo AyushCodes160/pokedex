@@ -30,7 +30,6 @@ async function createTestAccount() {
       pass: testAccount.pass, // generated ethereal password
     },
   });
-  console.log("Ethereal Email Configured.");
 }
 
 async function sendEmail(to, subject, text, html) {
@@ -44,7 +43,6 @@ async function sendEmail(to, subject, text, html) {
     html: html, // html body
   });
 
-  console.log("Message sent: %s", info.messageId);
   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 }
 

@@ -80,7 +80,7 @@ loginForm.addEventListener('submit', async (e) => {
 document.addEventListener("DOMContentLoaded", async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const resetToken = urlParams.get('resetToken');
-    const verifyToken = urlParams.get('token'); // Not usually on auth.html, but verification might redirect here if you change logic
+    const verifyToken = urlParams.get('token');
 
     // Forgot Password Modal
     const forgotLink = document.querySelector('a[href="#"]'); // Identifying the "Forgot your password?" link

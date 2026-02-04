@@ -24,22 +24,18 @@ body.auth-body {
   border-radius: 20px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   overflow: hidden;
-  /* Removed display: flex to rely on absolute positioning */
 }
 
 .auth-form-container {
   position: absolute;
-  /* Enforce absolute positioning */
   top: 0;
   height: 100%;
   width: 50%;
-  /* Explicit width here, though handled by subclasses */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 0 40px;
-  /* Reduced vertical padding reliance, standard horizontal */
   text-align: center;
   transition: all 0.6s ease-in-out;
   background: #fdfdfd;

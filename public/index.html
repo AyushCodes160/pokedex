@@ -201,6 +201,22 @@
         <div id="pokemon-3d" class="model-3d" style="display: none"></div>
       </section>
     </main>
+    <!-- Mobile Search Toggle -->
+    <button id="mobile-search-btn" class="mobile-only">
+        <i class="fas fa-search"></i>
+    </button>
+
+    <!-- Mobile Search Overlay -->
+    <div id="mobile-search-overlay" class="mobile-search-overlay">
+        <div class="search-header">
+            <input type="text" id="mobile-search-input" placeholder="Search Pokémon..." autocomplete="off">
+            <button id="close-search-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="mobile-search-results" class="mobile-search-results">
+            <!-- Results injected here -->
+        </div>
+    </div>
+
     <script src="main.js"></script>
   </body>
 </html>

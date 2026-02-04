@@ -2,24 +2,13 @@ const signUpButton = document.getElementById('signUp');
 const signInButton = document.getElementById('signIn');
 const container = document.getElementById('container');
 
-// Mobile Toggle Elements
-const toSigninMobile = document.getElementById('to-signin');
-const toSignupMobile = document.getElementById('to-signup');
-
-function showSignup() {
+signUpButton.addEventListener('click', () => {
     container.classList.add("right-panel-active");
-}
+});
 
-function showSignin() {
+signInButton.addEventListener('click', () => {
     container.classList.remove("right-panel-active");
-}
-
-signUpButton.addEventListener('click', showSignup);
-signInButton.addEventListener('click', showSignin);
-
-// Bind mobile toggles
-if(toSignupMobile) toSignupMobile.addEventListener('click', showSignup);
-if(toSigninMobile) toSigninMobile.addEventListener('click', showSignin);
+});
 
 // Signup Logic
 const signupForm = document.getElementById('signup-form');

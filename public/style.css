@@ -1076,40 +1076,198 @@ body.dark-mode header {
 }
 
 
-/* Responsive adjustments */
-@media (max-width: 720px) {
-  .summary-card {
-    aspect-ratio: auto;
-    height: auto;
-  }
+/* Mobile Specific Design - "Red Card" Look */
+@media (max-width: 768px) {
 
-  .summary-content {
+  /* Layout Base */
+  .pokedex-layout {
     flex-direction: column;
+    height: 100vh;
+    background: #f5f5f5;
+    /* White/Grey Main BG */
   }
 
-  .summary-left,
-  .summary-right {
+  /* List (Hidden/Drawer or just top bar style for now) */
+  .sidebar {
+    display: none;
+    /* Hide list to focus on the 'Card' view as per image request */
+  }
+
+  /* Full Screen Details */
+  #pokemon-details {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    display: block !important;
+    /* Force show */
+    background: #f5f5f5;
+  }
+
+  /* The Main Card Container */
+  .summary-card {
+    height: 100%;
+    width: 100%;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Hide Desktop Decor */
+  .summary-diagonal {
+    display: none;
+  }
+
+  .pokeball-bg {
+    display: none;
+  }
+
+  /* 
+     Top Half: Image Area 
+     (Using flex order to move image to top)
+  */
+  .summary-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     width: 100%;
   }
 
-  .topbar {
-    position: static;
-    transform: none;
-    height: auto;
-    margin-bottom: 12px;
+  .summary-right {
+    order: 1;
+    /* First */
+    height: 40%;
+    width: 100%;
+    background: #f5f5f5;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    /* Above the red card slightly */
   }
 
-  .topbar-inner {
-    transform: none;
-  }
-
+  /* The Circle behind Pokemon */
   .image-wrap {
-    height: 260px;
+    width: 100%;
+    height: 100%;
   }
 
   .circle-bg {
     width: 280px;
     height: 280px;
+    background: #fff;
+    border: 1px solid #eee;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
   }
 
+  .summary-img {
+    width: 200px;
+    height: 200px;
+  }
+
+  /* 
+     Bottom Half: Red Stats Card 
+  */
+  .summary-left {
+    order: 2;
+    /* Second */
+    flex: 1;
+    background: #ef4444;
+    /* Pokemon Red */
+    width: 100%;
+    padding: 60px 30px 30px;
+    /* Top padding for diagonal overlap */
+    border-radius: 0;
+    position: relative;
+    color: white;
+    /* The slanted top */
+    clip-path: polygon(0 50px, 100% 0, 100% 100%, 0 100%);
+    margin-top: -50px;
+    /* Pull up to overlap */
+    z-index: 1;
+  }
+
+  /* Fix Name Bar inside Red Card */
+  .topbar {
+    position: static;
+    transform: none;
+    background: transparent;
+    padding: 0;
+    margin-bottom: 10px;
+  }
+
+  .topbar-inner {
+    transform: none;
+    padding: 0;
+    justify-content: flex-start;
+  }
+
+  .topbar .name {
+    font-size: 32px;
+    color: white;
+    text-shadow: none;
+  }
+
+  .orange-dot,
+  .topbar .right {
+    display: none;
+    /* Simplify header */
+  }
+
+  /* Types */
+  .stats-type {
+    margin-top: 5px;
+    margin-bottom: 20px;
+  }
+
+  .type-pill {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    font-size: 14px;
+    padding: 6px 14px;
+  }
+
+  /* Stats Bars - Make them pop on Red */
+  .stats-header {
+    display: none;
+    /* Hide default name header since we use topbar */
+  }
+
+  .stats-bars {
+    gap: 12px;
+  }
+
+  .s-label {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+  }
+
+  .s-val {
+    color: white;
+    font-size: 16px;
+  }
+
+  .s-track {
+    background: rgba(255, 255, 255, 0.2);
+    height: 8px;
+  }
+
+  .s-fill {
+    /* Keep existing colorful classes but maybe brighten them? */
+  }
+
+  /* Logout floating top right */
+  #logout-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.1);
+    color: #333;
+  }
 }

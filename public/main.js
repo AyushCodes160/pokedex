@@ -47,6 +47,53 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Automatically load Bulbasaur on startup
   await showPokemonDetails(1, "bulbasaur");
+
+  // Mobile Search Logic
+  const mobileSearchBtn = document.getElementById('mobile-search-btn');
+  const mobileSearchOverlay = document.getElementById('mobile-search-overlay');
+  const closeSearchBtn = document.getElementById('close-search-btn');
+  const mobileSearchInput = document.getElementById('mobile-search-input');
+  const mobileSearchResults = document.getElementById('mobile-search-results');
+
+  if (mobileSearchBtn) {
+      mobileSearchBtn.addEventListener('click', () => {
+          mobileSearchOverlay.classList.add('active');
+          mobileSearchInput.focus();
+          renderMobileSearchResults(allPokemon); // Initial render
+      });
+  }
+
+  if (closeSearchBtn) {
+      closeSearchBtn.addEventListener('click', () => {
+          mobileSearchOverlay.classList.remove('active');
+      });
+  }
+
+  if (mobileSearchInput) {
+      mobileSearchInput.addEventListener('input', (e) => {
+          const query = e.target.value.toLowerCase();
+          const filtered = allPokemon.filter(p => p.name.includes(query));
+          renderMobileSearchResults(filtered);
+      });
+  }
+
+  function renderMobileSearchResults(list) {
+      mobileSearchResults.innerHTML = "";
+      list.forEach((pokemon) => {
+        const card = document.createElement("div");
+        card.className = "pokemon-card";
+        const id = pokemon.url.split("/").filter(Boolean).pop();
+        card.innerHTML = `
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png" alt="${pokemon.name}" loading="lazy" />
+          <h3>${capitalize(pokemon.name)}</h3>
+        `;
+        card.onclick = () => {
+            showPokemonDetails(id, pokemon.name);
+            mobileSearchOverlay.classList.remove('active');
+        };
+        mobileSearchResults.appendChild(card);
+      });
+  }
 });
 
 function renderPokemonList(list) {

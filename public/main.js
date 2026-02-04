@@ -27,6 +27,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const data = await res.json();
   allPokemon = data.results;
   renderPokemonList(allPokemon);
+
+  // Automatically load Bulbasaur on startup
+  await showPokemonDetails(1, "bulbasaur");
 });
 
 function renderPokemonList(list) {

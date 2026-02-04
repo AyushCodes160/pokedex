@@ -11,6 +11,11 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
   </head>
   <body>
     <header>
@@ -54,7 +59,143 @@
         <div id="pokemon-list" class="scroll-list"></div>
       </section>
       <section class="mainview">
-        <div id="pokemon-details" class="details"></div>
+        <div id="pokemon-details" class="details">
+            <div class="max-w-6xl mx-auto p-8">
+                <h1 class="text-5xl font-bold mb-12 text-slate-800">Dragonite #149</h1>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                    
+                    <!-- Left Column: Image, Type, Stats -->
+                    <div class="space-y-12">
+                        <div class="flex flex-col items-center">
+                            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/149.png" alt="Dragonite" class="w-96 h-auto drop-shadow-xl">
+                        </div>
+
+                        <div>
+                            <h3 class="text-gray-500 text-lg mb-4">Type</h3>
+                            <div class="flex gap-4">
+                                <span class="bg-indigo-500 text-white px-6 py-2 rounded-lg text-sm uppercase font-bold tracking-wider shadow-md">Dragon</span>
+                                <span class="bg-blue-400 text-white px-6 py-2 rounded-lg text-sm uppercase font-bold tracking-wider shadow-md">Flying</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h2 class="text-3xl font-bold mb-6 text-slate-800">Base Stats</h2>
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <span class="w-32 text-right pr-4 text-gray-600 font-medium">Speed</span>
+                                    <div class="flex-1 bg-gray-200 rounded-full h-6 overflow-hidden">
+                                        <div class="bg-blue-600 h-full rounded-full" style="width: 32%"></div>
+                                    </div>
+                                    <span class="pl-4 w-12 text-sm font-bold text-gray-700">80</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-32 text-right pr-4 text-gray-600 font-medium">Sp. Def</span>
+                                    <div class="flex-1 bg-gray-200 rounded-full h-6 overflow-hidden">
+                                        <div class="bg-blue-600 h-full rounded-full" style="width: 40%"></div>
+                                    </div>
+                                    <span class="pl-4 w-12 text-sm font-bold text-gray-700">100</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-32 text-right pr-4 text-gray-600 font-medium">Sp. Atk</span>
+                                    <div class="flex-1 bg-gray-200 rounded-full h-6 overflow-hidden">
+                                        <div class="bg-blue-600 h-full rounded-full" style="width: 40%"></div>
+                                    </div>
+                                    <span class="pl-4 w-12 text-sm font-bold text-gray-700">100</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-32 text-right pr-4 text-gray-600 font-medium">Defense</span>
+                                    <div class="flex-1 bg-gray-200 rounded-full h-6 overflow-hidden">
+                                        <div class="bg-blue-600 h-full rounded-full" style="width: 38%"></div>
+                                    </div>
+                                    <span class="pl-4 w-12 text-sm font-bold text-gray-700">95</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-32 text-right pr-4 text-gray-600 font-medium">Attack</span>
+                                    <div class="flex-1 bg-gray-200 rounded-full h-6 overflow-hidden">
+                                        <div class="bg-blue-600 h-full rounded-full" style="width: 55%"></div>
+                                    </div>
+                                    <span class="pl-4 w-12 text-sm font-bold text-gray-700">134</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-32 text-right pr-4 text-gray-600 font-medium">HP</span>
+                                    <div class="flex-1 bg-gray-200 rounded-full h-6 overflow-hidden">
+                                        <div class="bg-blue-600 h-full rounded-full" style="width: 37%"></div>
+                                    </div>
+                                    <span class="pl-4 w-12 text-sm font-bold text-gray-700">91</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Height, Weight, Species, Abilities, Defenses -->
+                    <div class="space-y-12">
+                        
+                        <div class="grid grid-cols-2 gap-8">
+                             <div>
+                                <h3 class="text-gray-500 text-lg mb-1">Height</h3>
+                                <p class="text-4xl font-semibold text-slate-800">2.2 m</p>
+                            </div>
+
+                            <div>
+                                <h3 class="text-gray-500 text-lg mb-1">Weight</h3>
+                                <p class="text-4xl font-semibold text-slate-800">210.0 kg</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-8">
+                            <div>
+                                <h3 class="text-gray-500 text-lg mb-1">Species</h3>
+                                <p class="text-5xl font-normal text-slate-800">Dragon</p>
+                            </div>
+
+                            <div>
+                                <h3 class="text-gray-500 text-lg mb-2">Abilities</h3>
+                                <div class="space-y-2">
+                                    <p class="text-3xl font-bold text-slate-800">Inner Focus</p>
+                                    <p class="text-3xl font-bold text-slate-800">Multiscale <span class="text-gray-500 font-normal text-xl">(Hidden)</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h2 class="text-3xl font-bold mb-6 text-slate-800">Type Defenses</h2>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <p class="text-gray-600 mb-2">Strong Weaknesses (x4)</p>
+                                    <span class="bg-cyan-400 text-white px-6 py-1 rounded text-xs uppercase font-bold inline-block shadow-sm">Ice</span>
+                                </div>
+
+                                <div>
+                                    <p class="text-gray-600 mb-2">Weaknesses (x2)</p>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="bg-yellow-700 text-white px-4 py-1 rounded text-xs uppercase font-bold shadow-sm">Rock</span>
+                                        <span class="bg-indigo-500 text-white px-4 py-1 rounded text-xs uppercase font-bold shadow-sm">Dragon</span>
+                                        <span class="bg-pink-400 text-white px-4 py-1 rounded text-xs uppercase font-bold shadow-sm">Fairy</span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p class="text-gray-600 mb-2">Resistances (x0.5)</p>
+                                    <div class="flex flex-wrap gap-2 text-xs font-bold uppercase text-white">
+                                        <span class="bg-orange-600 px-4 py-1 rounded shadow-sm">Fire</span>
+                                        <span class="bg-blue-600 px-4 py-1 rounded shadow-sm">Water</span>
+                                        <span class="bg-gray-400 px-4 py-1 rounded shadow-sm">Fight</span>
+                                        <span class="bg-lime-600 px-4 py-1 rounded shadow-sm">Bug</span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p class="text-gray-600 mb-2">Strong Resistances (x0.25)</p>
+                                    <span class="bg-green-500 text-white px-4 py-1 rounded text-xs uppercase font-bold shadow-sm">Grass</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="pokemon-3d" class="model-3d" style="display: none"></div>
       </section>
     </main>

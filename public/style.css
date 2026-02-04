@@ -70,13 +70,24 @@ body {
   padding: 0;
 }
 
+@font-face {
+  font-family: 'Pokemon Solid';
+  src: url('fonts/Pokemon_Solid.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 header {
   background: linear-gradient(160deg, #121a24 0%, #0b1218 100%);
-  color: white;
+  color: #ffcb05;
+  /* Pokemon Yellow */
+  text-shadow: 3px 3px 0 #3c5aa6;
+  /* Pokemon Blue Stroke */
   padding: 1rem;
   text-align: center;
-  letter-spacing: 2px;
-  font-size: 2rem;
+  letter-spacing: 4px;
+  font-size: 2.5rem;
+  font-family: 'Pokemon Solid', cursive;
   box-shadow: 0 0 12px rgba(74, 222, 128, 0.15);
   position: relative;
 }

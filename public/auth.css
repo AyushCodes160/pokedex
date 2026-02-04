@@ -45,12 +45,22 @@ body.auth-body {
   background: #fdfdfd;
 }
 
+@font-face {
+  font-family: 'Pokemon Solid';
+  src: url('fonts/Pokemon_Solid.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .auth-form-container h1 {
-  font-weight: 800;
+  font-family: 'Pokemon Solid', sans-serif;
+  font-weight: 400;
   margin: 0 0 20px;
-  color: #333;
+  color: #ffcb05;
+  text-shadow: 2px 2px 0 #3c5aa6;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 4px;
+  font-size: 2.5rem;
 }
 
 .social-container {
@@ -301,14 +311,14 @@ body.auth-body {
 
 /* Modal Styles */
 .modal {
-  display: none; 
-  position: fixed; 
-  z-index: 200; 
+  display: none;
+  position: fixed;
+  z-index: 200;
   left: 0;
   top: 0;
-  width: 100%; 
-  height: 100%; 
-  background-color: rgba(0,0,0,0.7); 
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(5px);

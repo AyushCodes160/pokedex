@@ -60,49 +60,41 @@ async function showPokemonDetails(id, name) {
     <div class="summary-card">
       <div class="summary-diagonal"></div>
       <div class="summary-content">
-        <div class="summary-left">
-          <div class="summary-tabs">
-            <span class="chevron">‹</span>
-            <div class="icons-row">
-              <span class="circle-icon"></span>
-              <span class="mini-icon">⏱</span>
-              <span class="mini-icon">★</span>
-              <span class="mini-icon">📄</span>
-              <span class="mini-icon">🏆</span>
-            </div>
-            <span class="chevron">›</span>
-          </div>
-
-          <div class="summary-table">
-            <div class="summary-row alt"><span class="label">Name</span><span class="value bold">${capitalize(name)}</span></div>
-            <div class="summary-row"><span class="label">Type</span><span class="value"><span class="type-pill">${typeLabels.join(" / ")}</span></span></div>
-            <div class="summary-row"><span class="label">ID No.</span><span class="value bold">${id}</span></div>
-            <div class="summary-row alt"><span class="label">Current no. of Exp. Points</span><span class="value bold">${baseExp}</span></div>
-
-            <div class="exp-section">
-              <div class="exp-total"></div>
-              <div class="exp-needed">
-                <div class="exp-track"><div class="exp-fill" style="width: 60%"></div></div>
+          <div class="summary-left">
+            <div class="stats-header">
+              <div class="stats-name">${capitalize(name)}</div>
+              <div class="stats-type">
+                ${typeLabels.map(t => `<span class="type-pill">${t}</span>`).join(" ")}
               </div>
             </div>
+            
+            <div class="stats-bars">
+              ${data.stats.map(s => {
+                const val = s.base_stat;
+                const sName = s.stat.name === 'hp' ? 'HP' : 
+                              s.stat.name === 'special-attack' ? 'Sp. Atk' :
+                              s.stat.name === 'special-defense' ? 'Sp. Def' :
+                              capitalize(s.stat.name);
+                // Simple color logic based on value
+                let color = "stat-low";
+                if (val >= 60) color = "stat-mid";
+                if (val >= 90) color = "stat-high";
+                
+                // Visual width cap at 100% just for the bar, though stats go higher
+                const width = Math.min(val, 100);
 
-            <div class="markings">
-              <div class="play-icon">▶</div>
-              <div class="marks">● ▲ ■ ◆ ♥ ★</div>
-            </div>
-
-            <div class="held-item">
-              <div class="held-header">
-                <span class="held-label">Held Item</span>
-                <div class="held-meta">
-                  <div class="held-dot"></div>
-                  <span class="held-name">Miracle Seed</span>
-                </div>
-              </div>
-              <p class="held-desc">An item to be held by a Pokémon. It's a seed imbued with life-force that boosts the power of Grass-type moves.</p>
+                return `
+                  <div class="stat-bar">
+                    <div class="s-label">${sName}</div>
+                    <div class="s-track">
+                      <div class="s-fill ${color}" style="width: ${width}%"></div>
+                    </div>
+                    <div class="s-val">${val}</div>
+                  </div>
+                `;
+              }).join("")}
             </div>
           </div>
-        </div>
 
         <div class="summary-right">
           <div class="topbar">

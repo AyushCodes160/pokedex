@@ -81,7 +81,7 @@ async function showPokemonDetails(id, name) {
             <div class="stats-header">
               <div class="stats-name">${capitalize(name)}</div>
               <div class="stats-type">
-                ${typeLabels.map(t => `<span class="type-pill">${t}</span>`).join(" ")}
+                ${data.types.map(t => `<span class="type-pill type-${t.type.name.toLowerCase()}">${t.type.name.toUpperCase()}</span>`).join(" ")}
               </div>
             </div>
             

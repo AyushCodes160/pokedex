@@ -5,6 +5,23 @@ const searchInput = document.getElementById("search");
 let allPokemon = [];
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // Auth Check
+  const token = localStorage.getItem('token');
+  if (!token) {
+    window.location.href = 'auth.html';
+    return;
+  }
+
+  // Logout Handler
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = 'auth.html';
+    });
+  }
+
   const themeToggle = document.getElementById("theme-toggle");
   const savedTheme = localStorage.getItem("theme");
   const prefersDark = savedTheme

@@ -4,6 +4,18 @@ generator client {
 
 datasource db {
   provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  name              String?
+  isVerified        Boolean   @default(false)
+  verificationToken String?
+  resetToken        String?
+  resetTokenExpiry  DateTime?
 }
 
 model Team {
@@ -22,7 +34,7 @@ model TeamPokemon {
   slot      Int
   speciesId Int
   nature    String
-  moves     Json
+  moves     String
 
   @@unique([teamId, slot])
 }

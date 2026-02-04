@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon Auth</title>
+    <link rel="icon" type="image/webp" href="favicon.webp">
+    <!-- Import Orbitron font for consistency -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body class="auth-body">
+
+<div class="auth-container" id="container">
+    <!-- Sign Up Form -->
+    <div class="auth-form-container sign-up-container">
+        <form id="signup-form">
+            <h1>Create Account</h1>
+            <div class="social-container">
+                <a href="#" class="social"><i class="pokeball-icon"></i></a>
+            </div>
+            <span>or use your email for registration</span>
+            <input type="text" id="signup-name" placeholder="Trainer Name" class="auth-input" />
+            <input type="email" id="signup-email" placeholder="Email" class="auth-input" required />
+            <input type="password" id="signup-password" placeholder="Password" class="auth-input" required />
+            <div class="error-message" id="signup-error"></div>
+            <button type="submit" class="auth-btn">Sign Up</button>
+        </form>
+    </div>
+
+    <!-- Sign In Form -->
+    <div class="auth-form-container sign-in-container">
+        <form id="login-form">
+            <h1>Sign in</h1>
+            <div class="social-container">
+                <a href="#" class="social"><i class="pokeball-icon"></i></a>
+            </div>
+            <span>or use your account</span>
+            <input type="email" id="login-email" placeholder="Email" class="auth-input" required />
+            <input type="password" id="login-password" placeholder="Password" class="auth-input" required />
+            <div class="error-message" id="login-error"></div>
+            <a href="#">Forgot your password?</a>
+            <button type="submit" class="auth-btn">Sign In</button>
+        </form>
+    </div>
+
+    <!-- Overlay Panel -->
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="pokeball-bg"></div>
+            <div class="overlay-panel overlay-left">
+                <h1>Welcome Back!</h1>
+                <p>To keep connecting with your Pokemon Team, please login with your personal info</p>
+                <button class="auth-btn ghost" id="signIn">Sign In</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h1>Hello, Trainer!</h1>
+                <p>Enter your personal details and start your journey to become a Pokemon Master</p>
+                <button class="auth-btn ghost" id="signUp">Sign Up</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Forgot Password Modal (Hidden by default) -->
+    <div id="forgot-password-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Forgot Password?</h2>
+            <p>Enter your email to receive a reset link.</p>
+            <input type="email" id="forgot-email" placeholder="Email" class="auth-input" />
+            <div class="error-message" id="forgot-message"></div>
+            <button id="send-reset-btn" class="auth-btn">Send Link</button>
+        </div>
+    </div>
+
+    <!-- Reset Password Modal (Hidden by default) -->
+    <div id="reset-password-modal" class="modal">
+        <div class="modal-content">
+            <h2>Reset Password</h2>
+            <p>Enter your new password.</p>
+            <input type="password" id="new-password" placeholder="New Password" class="auth-input" />
+            <div class="error-message" id="reset-message"></div>
+            <button id="confirm-reset-btn" class="auth-btn">Reset Password</button>
+        </div>
+    </div>
+
+<script src="auth.js"></script>
+</body>
+</html>

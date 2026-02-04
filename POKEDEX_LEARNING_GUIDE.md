@@ -6,6 +6,9 @@ This document is designed to help you understand all the technologies, concepts,
 
 ## 1. Technologies Used
 - **Node.js & Express:** Backend server, REST API
+- **Prisma & SQLite:** ORM and Database for user management
+- **JWT & bcrypt:** Stateless authentication and password hashing
+- **Nodemailer:** Email sending service (Verification/Resets)
 - **JavaScript (ES6+):** Frontend logic, asynchronous data fetching
 - **HTML/CSS:** User interface and styling
 - **three.js:** 3D model rendering in browser

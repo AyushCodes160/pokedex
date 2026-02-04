@@ -1,0 +1,344 @@
+/* Global Box Sizing for Auth Page */
+* {
+  box-sizing: border-box;
+}
+
+/* Auth Page Specific Styles */
+body.auth-body {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  overflow: hidden;
+}
+
+.auth-container {
+  position: relative;
+  width: 900px;
+  max-width: 100%;
+  min-height: 600px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+  /* Removed display: flex to rely on absolute positioning */
+}
+
+.auth-form-container {
+  position: absolute;
+  /* Enforce absolute positioning */
+  top: 0;
+  height: 100%;
+  width: 50%;
+  /* Explicit width here, though handled by subclasses */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 40px;
+  /* Reduced vertical padding reliance, standard horizontal */
+  text-align: center;
+  transition: all 0.6s ease-in-out;
+  background: #fdfdfd;
+}
+
+.auth-form-container h1 {
+  font-weight: 800;
+  margin: 0 0 20px;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.social-container {
+  margin: 20px 0;
+}
+
+.social-container a {
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 5px;
+  height: 40px;
+  width: 40px;
+  text-decoration: none;
+  color: #333;
+  transition: 0.3s;
+}
+
+.social-container a:hover {
+  background-color: #eee;
+}
+
+.auth-form-container span {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.auth-input {
+  background-color: #eee;
+  border: none;
+  padding: 12px 15px;
+  margin: 8px 0;
+  width: 100%;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.auth-input:focus {
+  background-color: #e0e0e0;
+  box-shadow: 0 0 0 2px #ff4b4b;
+}
+
+.auth-btn {
+  border-radius: 20px;
+  border: 1px solid #ff4b4b;
+  background-color: #ff4b4b;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 80ms ease-in, background 0.3s;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.auth-btn:active {
+  transform: scale(0.95);
+}
+
+.auth-btn:hover {
+  background-color: #e63e3e;
+}
+
+.auth-btn.ghost {
+  background-color: transparent;
+  border-color: #ffffff;
+}
+
+.overlay-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: transform 0.6s ease-in-out;
+  z-index: 100;
+}
+
+.overlay {
+  background: #ff416c;
+  background: -webkit-linear-gradient(to right, #ff4b4b, #ff416c);
+  background: linear-gradient(to right, #ff4b4b, #ff416c);
+  background-color: #ff4b4b;
+  color: #ffffff;
+  position: relative;
+  left: -100%;
+  height: 100%;
+  width: 200%;
+  transform: translateX(0);
+  transition: transform 0.6s ease-in-out;
+}
+
+.overlay-panel {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 40px;
+  text-align: center;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  transform: translateX(0);
+  transition: transform 0.6s ease-in-out;
+}
+
+.overlay-left {
+  transform: translateX(-20%);
+}
+
+.overlay-right {
+  right: 0;
+  transform: translateX(0);
+}
+
+.overlay-panel h1 {
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.overlay-panel p {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  letter-spacing: 0.5px;
+  margin: 20px 0 30px;
+}
+
+/* Animation Classes using JS to toggle */
+.auth-container.right-panel-active .auth-form-container.sign-in-container {
+  transform: translateX(100%);
+}
+
+.auth-container.right-panel-active .auth-form-container.sign-up-container {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+}
+
+.auth-container.right-panel-active .overlay-container {
+  transform: translateX(-100%);
+}
+
+.auth-container.right-panel-active .overlay {
+  transform: translateX(50%);
+}
+
+.auth-container.right-panel-active .overlay-left {
+  transform: translateX(0);
+}
+
+.auth-container.right-panel-active .overlay-right {
+  transform: translateX(20%);
+}
+
+/* Setup for initial state (Sign Up hidden behind Sign In? No, standard slider) */
+.sign-in-container {
+  left: 0;
+  width: 50%;
+  z-index: 2;
+}
+
+.sign-up-container {
+  left: 0;
+  width: 50%;
+  opacity: 0;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  height: 100%;
+}
+
+.auth-container.right-panel-active .sign-up-container {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+  animation: show 0.6s;
+}
+
+@keyframes show {
+
+  0%,
+  49.99% {
+    opacity: 0;
+    z-index: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 1;
+    z-index: 5;
+  }
+}
+
+/* Pokemon Decor */
+.pokeball-bg {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  top: -50px;
+  right: -50px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.pokeball-bg::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-50%);
+}
+
+.pokeball-bg::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  border: 10px solid rgba(255, 255, 255, 0.1);
+}
+
+.error-message {
+  color: #ff4b4b;
+  font-size: 0.8rem;
+  margin-top: 10px;
+  min-height: 20px;
+}
+
+/* Modal Styles */
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 200; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  background-color: rgba(0,0,0,0.7); 
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  padding: 30px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+  border: 2px solid #ff4b4b;
+}
+
+.close-modal {
+  color: #aaa;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}

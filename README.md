@@ -8,6 +8,9 @@ This project is a full-featured Pokédex web application that displays informati
 
 ## 2. Tech Stack
 - **Backend:** Node.js (Express)
+- **Database:** SQLite with Prisma ORM
+- **Authentication:** JWT, bcryptjs
+- **Email Service:** Nodemailer (Ethereal for testing)
 - **Frontend:** HTML, CSS, JavaScript
 - **3D Rendering:** three.js
 - **Data Source:** PokéAPI
@@ -30,10 +33,17 @@ This project is a full-featured Pokédex web application that displays informati
    ```sh
    npm install
    ```
-2. Run backend server:
-   ```sh
-   node backend/server.js
    ```
+2. Initialize Database:
+   ```sh
+   npx prisma generate
+   npx prisma db push
+   ```
+3. Run backend server:
+   ```sh
+   node index.js
+   ```
+   *Note: Check console for Ethereal Email credentials/URL.*
 3. Open `public/index.html` in browser
 4. Add new models to `/models` and update frontend logic if needed
 

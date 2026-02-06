@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1025");
+  const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=2000");
   const data = await res.json();
   allPokemon = data.results;
   renderPokemonList(allPokemon);
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const id = pokemon.url.split("/").filter(Boolean).pop();
         card.innerHTML = `
           <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png" alt="${pokemon.name}" loading="lazy" />
-          <h3>${capitalize(pokemon.name)}</h3>
+          <h3>${formatName(pokemon.name)}</h3>
         `;
         card.onclick = () => {
             showPokemonDetails(id, pokemon.name);
@@ -106,7 +106,7 @@ function renderPokemonList(list) {
       <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png" alt="${
         pokemon.name
       }" />
-      <h3>${capitalize(pokemon.name)}</h3>
+      <h3>${formatName(pokemon.name)}</h3>
     `;
     card.onclick = () => showPokemonDetails(id, pokemon.name);
     pokemonList.appendChild(card);
@@ -126,7 +126,7 @@ async function showPokemonDetails(id, name) {
       <div class="summary-content">
           <div class="summary-left">
             <div class="stats-header">
-              <div class="stats-name">${capitalize(name)}</div>
+              <div class="stats-name">${formatName(name)}</div>
               <div class="stats-type">
                 ${data.types.map(t => `<span class="type-pill type-${t.type.name.toLowerCase()}">${t.type.name.toUpperCase()}</span>`).join(" ")}
               </div>
@@ -138,7 +138,7 @@ async function showPokemonDetails(id, name) {
                 const sName = s.stat.name === 'hp' ? 'HP' : 
                               s.stat.name === 'special-attack' ? 'Sp. Atk' :
                               s.stat.name === 'special-defense' ? 'Sp. Def' :
-                              capitalize(s.stat.name);
+                              formatName(s.stat.name);
                 // Simple color logic based on value
                 let color = "stat-low";
                 if (val >= 60) color = "stat-mid";
@@ -165,7 +165,7 @@ async function showPokemonDetails(id, name) {
             <div class="topbar-inner">
               <div class="left">
                 <div class="orange-dot"></div>
-                <span class="name">${capitalize(name)}</span>
+                <span class="name">${formatName(name)}</span>
               </div>
               <div class="right">
                 <span class="gender">♂</span>
@@ -200,6 +200,15 @@ searchInput.addEventListener("input", (e) => {
   renderPokemonList(filtered);
 });
 
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+function formatName(str) {
+  let words = str.split('-');
+  if (words.includes('mega')) {
+    words = words.filter(w => w !== 'mega');
+    words.unshift('Mega');
+  } else if (words.includes('gmax')) { // PokeAPI uses 'gmax'
+    words = words.filter(w => w !== 'gmax');
+    words.unshift('Gigantamax');
+  }
+
+  return words.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 }

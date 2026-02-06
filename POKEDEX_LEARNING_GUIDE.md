@@ -1,4 +1,4 @@
-# Pokédex Project Learning & Interview Guide
+# Pokédex Project Learning and Interview Guide
 
 This document is designed to help you understand all the technologies, concepts, and resources used in building your Pokédex project. It also provides study topics and interview preparation tips so you can confidently discuss your project.
 

@@ -1305,3 +1305,83 @@ body.dark-mode header {
     color: #333;
   }
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .pokedex-layout {
+    flex-direction: column;
+    height: calc(100vh - 80px);
+    /* Adjust for header height */
+  }
+
+  .sidebar {
+    width: 100%;
+    flex: 1;
+    display: flex;
+  }
+
+  /* When details are NOT shown, sidebar is visible (default) */
+  .pokedex-layout:not(.show-details) .sidebar {
+    display: flex;
+  }
+
+  .pokedex-layout:not(.show-details) .mainview {
+    display: none;
+  }
+
+  /* When details ARE shown */
+  .pokedex-layout.show-details .sidebar {
+    display: none;
+  }
+
+  .pokedex-layout.show-details .mainview {
+    display: flex;
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .mainview {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  /* Hide the floating search button since search bar is in sidebar */
+  #mobile-search-btn {
+    display: none !important;
+  }
+
+  /* Initial state of details */
+  .details {
+    display: block !important;
+    /* Force display block when parent mainview is visible */
+    margin-bottom: 1rem;
+    padding: 1rem;
+  }
+
+  /* Back Button */
+  #back-to-list-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #333;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    width: fit-content;
+    font-weight: bold;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  #back-to-list-btn:hover {
+    background: #444;
+  }
+}
+
+/* Hide back button on desktop */
+@media (min-width: 769px) {
+  #back-to-list-btn {
+    display: none;
+  }
+}

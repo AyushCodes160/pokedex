@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderPokemonList(allPokemon);
 
   // Automatically load Bulbasaur on startup
-  await showPokemonDetails(1, "bulbasaur");
+  await showPokemonDetails(1, "bulbasaur", true);
 
   // Mobile Search Logic
   const mobileSearchBtn = document.getElementById('mobile-search-btn');
@@ -212,3 +212,32 @@ function formatName(str) {
 
   return words.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 }
+
+// Mobile View Logic
+const mainLayout = document.querySelector('.pokedex-layout');
+const backBtn = document.getElementById('back-to-list-btn');
+
+function showMobileDetails() {
+    if (window.innerWidth <= 768) {
+        mainLayout.classList.add('show-details');
+        if (backBtn) backBtn.style.display = 'flex';
+    }
+}
+
+function hideMobileDetails() {
+    mainLayout.classList.remove('show-details');
+    if (backBtn) backBtn.style.display = 'none';
+}
+
+if (backBtn) {
+    backBtn.addEventListener('click', hideMobileDetails);
+}
+
+// Override showPokemonDetails to trigger mobile view
+const originalShowDetails = showPokemonDetails;
+showPokemonDetails = async function(id, name, skipViewSwitch = false) {
+    await originalShowDetails(id, name);
+    if (!skipViewSwitch) {
+        showMobileDetails();
+    }
+};

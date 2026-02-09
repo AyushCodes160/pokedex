@@ -4,6 +4,7 @@ const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
 
 const app = express();
@@ -15,6 +16,11 @@ const SECRET_KEY = "super-secret-pokemon-key"; // In production, use environment
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Simple Ping Endpoint for Keep-Alive
+app.get('/api/ping', (req, res) => {
+  res.send('PONG');
+});
 
 // Email Configuration (Ethereal)
 let transporter;
@@ -217,5 +223,17 @@ app.post('/api/reset-password', async (req, res) => {
 createTestAccount().then(() => {
   app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
+
+    // Keep-Alive Mechanism for Render
+    // This server will ping itself every 14 minutes to prevent Render's free tier from sleeping (which happens after 15 mins inactivity)
+    const renderUrl = process.env.RENDER_EXTERNAL_URL || "https://pokedex-backend-v072.onrender.com"; // Fallback to hardcoded URL if env var missing
+    if (renderUrl) {
+      console.log(`Setting up keep-alive for ${renderUrl}`);
+      setInterval(() => {
+        axios.get(`${renderUrl}/api/ping`) // Using a specific route or root
+          .then(() => console.log('Keep-alive ping successful'))
+          .catch(err => console.error('Keep-alive ping failed:', err.message));
+      }, 14 * 60 * 1000); // 14 minutes
+    }
   });
 });

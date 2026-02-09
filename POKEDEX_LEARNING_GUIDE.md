@@ -22,6 +22,7 @@ This document is designed to help you understand all the technologies, concepts,
 - **Frontend Rendering:** Dynamically displaying Pokémon info and models
 - **3D Graphics:** Loading and animating 3D models with three.js
 - **Project Structure:** Organizing code for scalability and maintainability
+- **Deployment Optimization (Keep-Alive):** Implementing a self-ping mechanism to prevent server sleep on free hosting tiers (like Render).
 
 ---
 

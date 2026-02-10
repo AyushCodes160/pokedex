@@ -1296,14 +1296,15 @@ body.dark-mode header {
 
 
   /* Logout floating top right */
-  #logout-btn {
+  /* Logout floating removed to prevent overlap with theme toggle */
+  /* #logout-btn {
     position: fixed;
     top: 15px;
     right: 15px;
     z-index: 100;
     background: rgba(0, 0, 0, 0.1);
     color: #333;
-  }
+  } */
 }
 
 /* Mobile Responsive Styles */

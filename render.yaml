@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: pokedex-arena
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: NODE_VERSION
+        value: 20.11.0

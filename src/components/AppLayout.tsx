@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, BookOpen, Swords, Users, LogIn, LogOut, History, Sun, Moon } from 'lucide-react';
+import { Home, BookOpen, Swords, Users, LogIn, LogOut, History } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -11,6 +11,29 @@ const navItems = [
   { to: '/battle', icon: Swords, label: 'Battle' },
   { to: '/history', icon: History, label: 'History' },
 ];
+
+const PokeballIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="45" fill="white" stroke="currentColor" strokeWidth="5" />
+    <path d="M5 50 H95" stroke="currentColor" strokeWidth="5" />
+    <path d="M50 5 A45 45 0 0 1 95 50 H5 A45 45 0 0 1 50 5 Z" fill="#EE1515" />
+    <circle cx="50" cy="50" r="15" fill="white" stroke="currentColor" strokeWidth="5" />
+    <circle cx="50" cy="50" r="10" fill="white" />
+  </svg>
+);
+
+const UltraBallIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="45" fill="white" stroke="currentColor" strokeWidth="5" />
+    <path d="M5 50 H95" stroke="currentColor" strokeWidth="5" />
+    <path d="M50 5 A45 45 0 0 1 95 50 H5 A45 45 0 0 1 50 5 Z" fill="#2a2a2a" />
+    {/* Ultra Ball H shape */}
+    <path d="M20 20 Q50 60 80 20" stroke="#FCD116" strokeWidth="8" fill="none" />
+    <path d="M50 5 V25" stroke="#FCD116" strokeWidth="0" />
+    <circle cx="50" cy="50" r="15" fill="white" stroke="currentColor" strokeWidth="5" />
+    <circle cx="50" cy="50" r="10" fill="white" />
+  </svg>
+);
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
@@ -107,8 +130,10 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               className="group relative flex h-9 w-9 items-center justify-center rounded-lg border border-border transition-colors hover:bg-accent hover:text-accent-foreground"
               title={`Switch to ${theme === 'light' ? 'Dark (Ultra Ball)' : 'Light (Pokeball)'} Mode`}
             >
-              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              {/* Show Ultra Ball when Light (to switch to Dark) */}
+              <UltraBallIcon className={`absolute h-6 w-6 transition-all ${theme === 'light' ? 'rotate-0 scale-100' : 'rotate-90 scale-0'}`} />
+              {/* Show Pokeball when Dark (to switch to Light) */}
+              <PokeballIcon className={`absolute h-6 w-6 transition-all ${theme === 'dark' ? 'rotate-0 scale-100' : '-rotate-90 scale-0'}`} />
               <span className="sr-only">Toggle theme</span>
             </button>
 
@@ -148,7 +173,10 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             onClick={toggleTheme}
             className="flex flex-col items-center gap-0.5 px-3 py-1 text-xs font-bold transition-colors text-muted-foreground"
           >
-            {theme === 'light' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            {theme === 'light'
+              ? <UltraBallIcon className="h-6 w-6" />
+              : <PokeballIcon className="h-6 w-6" />
+            }
             Theme
           </button>
 

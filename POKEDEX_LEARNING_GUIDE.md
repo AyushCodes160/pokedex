@@ -1,71 +1,73 @@
-# Pokédex Project Learning and Interview Guide
+# Pokédex Arena: Learning & Interview Guide
 
-This document is designed to help you understand all the technologies, concepts, and resources used in building your Pokédex project. It also provides study topics and interview preparation tips so you can confidently discuss your project.
+This document is designed to help you understand the specific technologies, architectural decisions, and concepts used in the **Pokemon Arena** project. Use this guide to prepare for technical interviews or to deepen your understanding of the stack.
 
 ---
 
 ## 1. Technologies Used
-- **Node.js & Express:** Backend server, REST API
-- **Prisma & SQLite:** ORM and Database for user management
-- **JWT & bcrypt:** Stateless authentication and password hashing
-- **Nodemailer:** Email sending service (Verification/Resets)
-- **JavaScript (ES6+):** Frontend logic, asynchronous data fetching
-- **HTML/CSS:** User interface and styling
-- **three.js:** 3D model rendering in browser
-- **PokéAPI:** Pokémon data source
+
+### Frontend
+-   **React (v18):** UI library for building component-based interfaces.
+-   **Vite:** Next-generation frontend tooling for fast development and optimized builds.
+-   **TypeScript:** Adds static typing to JavaScript, improving code quality and developer experience.
+-   **Tailwind CSS:** Utility-first CSS framework for rapid, responsive styling.
+-   **Shadcn UI:** Reusable components built with Radix UI and Tailwind CSS.
+-   **Framer Motion:** Library for declarative, production-ready animations.
+-   **Recharts:** Composable charting library for visualizing stats.
+
+### Backend
+-   **Node.js & Express:** Runtime and framework for the REST API server.
+-   **Prisma ORM:** Next-generation ORM for type-safe database access.
+-   **MongoDB:** NoSQL database used to store Users, Teams, and Battle History.
+-   **JWT (JSON Web Tokens):** Standard for stateless authentication.
+-   **bcryptjs:** Library for hashing passwords securely.
 
 ---
 
-## 2. Key Concepts & How They’re Used
-- **REST APIs:** Used to fetch Pokémon data from PokéAPI and serve it via your backend
-- **Asynchronous Programming:** Fetching data and models using Promises and async/await
-- **Frontend Rendering:** Dynamically displaying Pokémon info and models
-- **3D Graphics:** Loading and animating 3D models with three.js
-- **Project Structure:** Organizing code for scalability and maintainability
-- **Deployment Optimization (Keep-Alive):** Implementing a self-ping mechanism to prevent server sleep on free hosting tiers (like Render).
+## 2. Key Concepts & Architecture
+
+### 🔄 The MERN Stack (with Prisma)
+This project uses a variation of the MERN stack. Instead of using Mongoose directly, we use **Prisma** to interact with **MongoDB**.
+-   **Why Prisma?** It provides auto-generated type definitions (`.d.ts`), making database queries type-safe. If you change your schema, TypeScript warns you about breaking changes in your code instantly.
+
+### 🔐 Authentication Flow
+1.  **Sign Up**: User provides credentials. Password is hashed with `bcrypt` (salt + hash) before saving to the DB. NEVER save plain-text passwords.
+2.  **Sign In**: User provides credentials. Server finds the user, compares the basic password with the hashed one using `bcrypt.compare()`.
+3.  **Token Generation**: If valid, server generates a **JWT** signed with a `SECRET_KEY`. This token is sent to the client.
+4.  **Client Storage**: The React app stores this token in `localStorage`.
+5.  **Protected Routes**: When the user accesses `/team-builder`, the app checks for the token. If missing, it redirects to `/auth`.
+6.  **Authenticated Requests**: API requests (like "Save Team") include the token in headers. The backend verifies the signature before processing.
+
+### 🎨 Styling & Theming
+-   **Tailwind Config**: We customized `tailwind.config.ts` to include specific fonts (`font-pixel`, `font-display`, `font-pokemon`) and colors (`pokemon-yellow`, `pokemon-blue`) to match the brand.
+-   **Global CSS**: `index.css` handles font imports (from CDNs) and special text effects (like the stroke on the "Pokemon Arena" logo).
+
+### 🚀 Deployment Strategy
+-   **Hybrid Serving**: In development, we run two servers (Vite for HMR, Express for API). In production (Render), we build the React app to static files (`dist/`) and tell Express to serve those static files along with the API routes.
+-   **Build Process**: `npm run build` compiles TypeScript/React into optimized HTML/CSS/JS. The `postinstall` script ensures `prisma generate` runs so the database client is ready on the cloud server.
 
 ---
 
 ## 3. Study Resources
-- **REST APIs:** [MDN REST API Guide](https://developer.mozilla.org/en-US/docs/Glossary/REST)
-- **Node.js:** [Node.js Docs](https://nodejs.org/en/docs/)
-- **Express:** [Express Docs](https://expressjs.com/)
-- **JavaScript:** [JavaScript Info](https://javascript.info/)
-- **Fetch API:** [MDN Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
-- **three.js:** [three.js Fundamentals](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene)
-- **PokéAPI:** [PokéAPI Docs](https://pokeapi.co/docs/v2)
-- **Promises:** [MDN Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises)
-- **HTML/CSS:** [MDN HTML](https://developer.mozilla.org/en-US/docs/Web/HTML), [MDN CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)
+
+-   **React Hooks**: [React Official Docs - Hooks](https://react.dev/reference/react)
+-   **Prisma with MongoDB**: [Prisma Mongo Guide](https://www.prisma.io/docs/concepts/database-connectors/mongodb)
+-   **JWT Auth**: [JWT.io Introduction](https://jwt.io/introduction)
+-   **Tailwind CSS**: [Tailwind Docs](https://tailwindcss.com/docs)
+-   **Vite**: [Why Vite?](https://vitejs.dev/guide/why.html)
 
 ---
 
-## 4. Topics to Master for Interviews
-- REST API design and usage
-- Node.js/Express server setup and routing
-- Asynchronous data fetching (Promises, async/await)
-- DOM manipulation and frontend rendering
-- three.js basics and 3D model integration
-- Project structure and scalability
-- Optimizing API calls and asset loading
+## 4. Common Interview Questions
 
----
+### Q: Why did you choose Prisma over Mongoose?
+**A:** "I chose Prisma for its strong type safety and auto-completion features. It integrates perfectly with TypeScript, significantly reducing runtime errors compared to Mongoose's flexible but looser schema definition."
 
-## 5. Common Interview Questions
-- How does your backend fetch and serve Pokémon data?
-- How do you handle asynchronous data fetching in JS?
-- How do you render and animate 3D models in the browser?
-- How do you structure your project for scalability?
-- How do you optimize API calls and asset loading?
-- What challenges did you face and how did you solve them?
+### Q: How do you handle Authentication state?
+**A:** "I verify the JWT token presence in `localStorage` on app initialization. The `AppLayout` component listens for storage events to update the UI (showing 'Logout' vs 'Sign In') dynamiclly without needing a page refresh."
 
----
+### Q: How does the application handle data persistence?
+**A:** "All critical data (Users, Teams, History) is stored in MongoDB. The schema is defined in `schema.prisma`, which serves as the single source of truth for the data model."
 
-## 6. How to Answer Interview Questions
-- **Be specific:** Reference your code and architecture
-- **Explain your reasoning:** Why you chose certain technologies or patterns
-- **Show understanding:** Discuss trade-offs, optimizations, and alternatives
-- **Demonstrate learning:** Mention resources and how you overcame obstacles
-
----
-
-Keep this document updated as you build your Pokédex. Review the study resources and practice answering the interview questions to ensure you’re well-prepared for technical interviews.
+### Q: How did you implement the custom fonts?
+**A:** "I used Google Fonts and CDNFonts to import 'Orbitron' and 'Pocket Monk'. I configured Tailwind utilities to apply these fonts easily across components (`font-display`, `font-pokemon`), keeping the design consistent and thematic."

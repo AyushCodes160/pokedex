@@ -58,12 +58,11 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-50 hidden border-b border-border bg-background/90 backdrop-blur-md md:block">
         <div className="container flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary font-pixel text-[10px] text-primary-foreground">
-              PB
-            </div>
-            <span className="font-display text-lg font-bold tracking-wider">
-              Pokédex <span className="text-primary">Arena</span>
-            </span>
+            <Link to="/" className="flex items-center gap-2">
+              <span className="text-3xl tracking-wider pokemon-logo-text hover:scale-105 transition-transform pb-2">
+                Pokemon Arena
+              </span>
+            </Link>
           </Link>
 
           <nav className="flex items-center gap-1">
@@ -72,13 +71,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-colors',
+                  'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-bold transition-colors',
                   location.pathname === item.to
                     ? 'bg-primary/10 text-primary'
                     : 'text-muted-foreground hover:text-foreground'
                 )}
               >
-                <item.icon className="h-4 w-4" />
                 {item.label}
               </Link>
             ))}
@@ -87,23 +85,21 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           {/* Auth Button */}
           {isLoggedIn ? (
             <div className="flex items-center gap-2">
-              <span className="mr-2 hidden text-sm font-medium text-muted-foreground md:inline-block">
+              <span className="mr-2 hidden text-sm font-bold text-muted-foreground md:inline-block">
                 {userName ? `Hi, ${userName}` : 'Welcome'}
               </span>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 rounded-lg border border-border bg-destructive/10 px-3 py-2 text-sm font-semibold text-destructive transition-colors hover:bg-destructive/20"
+                className="flex items-center gap-2 rounded-lg border border-border bg-destructive/10 px-3 py-2 text-sm font-bold text-destructive transition-colors hover:bg-destructive/20"
               >
-                <LogOut className="h-4 w-4" />
                 Logout
               </button>
             </div>
           ) : (
             <Link
               to="/auth"
-              className="flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
+              className="flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-bold text-muted-foreground transition-colors hover:text-foreground"
             >
-              <LogIn className="h-4 w-4" />
               Sign In
             </Link>
           )}
@@ -115,19 +111,18 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* Mobile bottom nav */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/95 backdrop-blur-md md:hidden">
-        <div className="flex items-center justify-around py-2">
+        <div className="flex items-center justify-around py-4">
           {navItems.map(item => (
             <Link
               key={item.to}
               to={item.to}
               className={cn(
-                'flex flex-col items-center gap-0.5 px-3 py-1 text-[10px] font-semibold transition-colors',
+                'flex flex-col items-center gap-0.5 px-3 py-1 text-xs font-bold transition-colors',
                 location.pathname === item.to
                   ? 'text-primary'
                   : 'text-muted-foreground'
               )}
             >
-              <item.icon className="h-5 w-5" />
               {item.label}
             </Link>
           ))}

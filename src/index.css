@@ -1,8 +1,38 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.cdnfonts.com/css/pocket-monk');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  /* ... existing base styles ... */
+}
+
+@layer utilities {
+  /* ... existing utilities ... */
+
+  .font-pixel {
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .font-pokemon {
+    font-family: 'Pocket Monk', sans-serif;
+  }
+
+  .pokemon-logo-text {
+    font-family: 'Pocket Monk', sans-serif;
+    color: #ffcb05;
+    /* Pokemon Yellow */
+    -webkit-text-stroke: 1px #3c5aa6;
+    /* Pokemon Blue - Thinner stroke for this font */
+    text-shadow: 2px 2px 0 #2a407c;
+    font-weight: 400;
+    /* Regular weight usually works best for brush fonts */
+    letter-spacing: 1px;
+    font-size: 2rem;
+    /* Larger for this font */
+  }
+}
 
 @layer base {
   :root {
@@ -70,6 +100,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground font-body;
   }
@@ -79,18 +110,33 @@
   .font-display {
     font-family: 'Orbitron', sans-serif;
   }
+
   .font-body {
     font-family: 'Rajdhani', sans-serif;
   }
+
   .font-pixel {
     font-family: 'Press Start 2P', cursive;
   }
+
   .gba-border {
     border: 4px solid;
     border-color: hsl(var(--foreground));
     box-shadow: inset -2px -2px 0 0 hsl(var(--muted-foreground)), inset 2px 2px 0 0 hsl(var(--foreground));
   }
+
   .type-badge {
     @apply px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider;
+  }
+
+  .pokemon-logo-text {
+    color: #ffcb05;
+    /* Pokemon Yellow */
+    -webkit-text-stroke: 1.5px #3c5aa6;
+    /* Pokemon Blue */
+    text-shadow: 3px 3px 0 #2a407c;
+    font-weight: 900;
+    /* Extra Bold */
+    letter-spacing: 1px;
   }
 }

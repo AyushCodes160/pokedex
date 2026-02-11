@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, BookOpen, Swords, Users, LogIn, LogOut, History } from 'lucide-react';
+import { Home, BookOpen, Swords, Users, LogIn, LogOut, History, Sun, Moon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -18,6 +18,26 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   const { toast } = useToast();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  // Initialize theme
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme('dark');
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+  };
 
   useEffect(() => {
     const checkAuth = () => {
@@ -58,11 +78,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-50 hidden border-b border-border bg-background/90 backdrop-blur-md md:block">
         <div className="container flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <Link to="/" className="flex items-center gap-2">
-              <span className="text-3xl tracking-wider pokemon-logo-text hover:scale-105 transition-transform pb-2">
-                Pokemon Arena
-              </span>
-            </Link>
+            <span className="text-3xl tracking-wider pokemon-logo-text hover:scale-105 transition-transform pb-2">
+              Pokemon Arena
+            </span>
           </Link>
 
           <nav className="flex items-center gap-1">
@@ -82,27 +100,40 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             ))}
           </nav>
 
-          {/* Auth Button */}
-          {isLoggedIn ? (
-            <div className="flex items-center gap-2">
-              <span className="mr-2 hidden text-sm font-bold text-muted-foreground md:inline-block">
-                {userName ? `Hi, ${userName}` : 'Welcome'}
-              </span>
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 rounded-lg border border-border bg-destructive/10 px-3 py-2 text-sm font-bold text-destructive transition-colors hover:bg-destructive/20"
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <Link
-              to="/auth"
-              className="flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-bold text-muted-foreground transition-colors hover:text-foreground"
+          <div className="flex items-center gap-2">
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="group relative flex h-9 w-9 items-center justify-center rounded-lg border border-border transition-colors hover:bg-accent hover:text-accent-foreground"
+              title={`Switch to ${theme === 'light' ? 'Dark (Ultra Ball)' : 'Light (Pokeball)'} Mode`}
             >
-              Sign In
-            </Link>
-          )}
+              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              <span className="sr-only">Toggle theme</span>
+            </button>
+
+            {/* Auth Button */}
+            {isLoggedIn ? (
+              <div className="flex items-center gap-2">
+                <span className="mr-2 hidden text-sm font-bold text-muted-foreground md:inline-block">
+                  {userName ? `Hi, ${userName}` : 'Welcome'}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 rounded-lg border border-border bg-destructive/10 px-3 py-2 text-sm font-bold text-destructive transition-colors hover:bg-destructive/20"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/auth"
+                className="flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-bold text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Sign In
+              </Link>
+            )}
+          </div>
         </div>
       </header>
 
@@ -111,7 +142,16 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* Mobile bottom nav */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/95 backdrop-blur-md md:hidden">
-        <div className="flex items-center justify-around py-4">
+        <div className="flex items-center justify-between px-4 py-2">
+          {/* Theme Toggle Mobile */}
+          <button
+            onClick={toggleTheme}
+            className="flex flex-col items-center gap-0.5 px-3 py-1 text-xs font-bold transition-colors text-muted-foreground"
+          >
+            {theme === 'light' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            Theme
+          </button>
+
           {navItems.map(item => (
             <Link
               key={item.to}

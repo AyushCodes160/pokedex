@@ -1,8 +1,69 @@
 @import url('https://fonts.cdnfonts.com/css/pocket-monk');
+@import url('https://fonts.cdnfonts.com/css/omega-ruby');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+
+  /* ... existing base styles ... */
+  :root {
+    /* Pokeball Theme (Light) */
+    --background: 0 0% 100%;
+    /* White */
+    --foreground: 222 47% 11%;
+    /* Dark Blue-Grey */
+    /* ... rest of the variables ... */
+  }
+
+  /* ... .dark class ... */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Omega Ruby', sans-serif;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Omega Ruby', sans-serif;
+    /* Use Omega Ruby for headers too, unless specified otherwise */
+  }
+
+  .font-body {
+    font-family: 'Omega Ruby', sans-serif;
+  }
+
+  .font-pixel {
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .font-pokemon {
+    font-family: 'Pocket Monk', sans-serif;
+  }
+
+  /* Keep Logo strictly Pocket Monk */
+  .pokemon-logo-text {
+    font-family: 'Pocket Monk', sans-serif;
+    color: #ffcb05;
+    /* Pokemon Yellow */
+    -webkit-text-stroke: 1px #3c5aa6;
+    /* Pokemon Blue */
+    text-shadow: 2px 2px 0 #2a407c;
+    font-weight: 400;
+    letter-spacing: 1px;
+    font-size: 2rem;
+  }
+
+  /* ... rest of utilities ... */
+}
 
 @layer base {
   /* ... existing base styles ... */

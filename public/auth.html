@@ -39,7 +39,6 @@
             <input type="email" id="login-email" placeholder="Email" class="auth-input" required />
             <input type="password" id="login-password" placeholder="Password" class="auth-input" required />
             <div class="error-message" id="login-error"></div>
-            <a href="#">Forgot your password?</a>
             <button type="submit" class="auth-btn">Sign In</button>
         </form>
     </div>
@@ -61,29 +60,6 @@
         </div>
     </div>
 </div>
-
-    <!-- Forgot Password Modal (Hidden by default) -->
-    <div id="forgot-password-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>Forgot Password?</h2>
-            <p>Enter your email to receive a reset link.</p>
-            <input type="email" id="forgot-email" placeholder="Email" class="auth-input" />
-            <div class="error-message" id="forgot-message"></div>
-            <button id="send-reset-btn" class="auth-btn">Send Link</button>
-        </div>
-    </div>
-
-    <!-- Reset Password Modal (Hidden by default) -->
-    <div id="reset-password-modal" class="modal">
-        <div class="modal-content">
-            <h2>Reset Password</h2>
-            <p>Enter your new password.</p>
-            <input type="password" id="new-password" placeholder="New Password" class="auth-input" />
-            <div class="error-message" id="reset-message"></div>
-            <button id="confirm-reset-btn" class="auth-btn">Reset Password</button>
-        </div>
-    </div>
 
 <script src="auth.js"></script>
 </body>

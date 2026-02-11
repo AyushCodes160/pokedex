@@ -38,7 +38,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     // Listen for storage events to update auth state across tabs or after login
     window.addEventListener('storage', checkAuth);
     return () => window.removeEventListener('storage', checkAuth);
-  }, [location.pathname]); // Re-check on route change to catch login redirects
+  }, [location.pathname]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -108,14 +108,13 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             </Link>
           )}
         </div>
-    </div>
-      </header >
+      </header>
 
-    {/* Main content */ }
-    < main className = "flex-1 pb-20 md:pb-0" > { children }</main >
+      {/* Main content */}
+      <main className="flex-1 pb-20 md:pb-0">{children}</main>
 
-      {/* Mobile bottom nav */ }
-      < nav className = "fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/95 backdrop-blur-md md:hidden" >
+      {/* Mobile bottom nav */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/95 backdrop-blur-md md:hidden">
         <div className="flex items-center justify-around py-2">
           {navItems.map(item => (
             <Link
@@ -133,7 +132,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             </Link>
           ))}
         </div>
-      </nav >
-    </div >
+      </nav>
+    </div>
   );
 }

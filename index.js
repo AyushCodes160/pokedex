@@ -28,7 +28,6 @@ app.use(express.urlencoded({ extended: true }));
 // ... (Ping endpoint) ...
 
 // SPA Fallback (Put this LAST, after all API routes)
-// But I need to define API routes first.
 
 // Simple Ping Endpoint for Keep-Alive
 app.get('/api/ping', (req, res) => {

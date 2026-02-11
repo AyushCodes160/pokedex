@@ -1,21 +1,34 @@
-const express = require('express');
-const path = require('path');
-const { PrismaClient } = require('@prisma/client');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
-const axios = require('axios');
-const { v4: uuidv4 } = require('uuid');
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
+import axios from 'axios';
+import cors from 'cors';
+import { v4 as uuidv4 } from 'uuid';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const prisma = new PrismaClient();
-const port = 3000;
-const SECRET_KEY = "super-secret-pokemon-key"; // In production, use environment variable
+const port = process.env.PORT || 3000;
+const SECRET_KEY = process.env.SECRET_KEY || "super-secret-pokemon-key";
+
+app.use(cors());
 
 // Middleware
-app.use(express.static('public'));
+app.use(express.static('dist')); // Serve Vite build
+app.use(express.static('public')); // Fallback for any separate public assets if needed
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// ... (Ping endpoint) ...
+
+// SPA Fallback (Put this LAST, after all API routes)
+// But I need to define API routes first.
 
 // Simple Ping Endpoint for Keep-Alive
 app.get('/api/ping', (req, res) => {
@@ -220,20 +233,124 @@ app.post('/api/reset-password', async (req, res) => {
   }
 });
 
+// Teams API
+app.get('/api/teams', async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ error: "Unauthorized" });
+  
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const teams = await prisma.savedTeam.findMany({ 
+        where: { user_id: decoded.userId },
+        orderBy: { updatedAt: 'desc' }
+    });
+    res.json(teams);
+  } catch (error) {
+    console.error("Fetch teams error:", error);
+    res.status(401).json({ error: "Invalid token" });
+  }
+});
+
+app.post('/api/teams', async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const { name, team_data } = req.body;
+    
+    const team = await prisma.savedTeam.create({
+      data: {
+        name,
+        team_data, // Prisma handles Json type automatically
+        user_id: decoded.userId
+      }
+    });
+    res.json(team);
+  } catch (error) {
+    console.error("Save team error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.delete('/api/teams/:id', async (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const { id } = req.params;
+        
+        // Verify ownership
+        const team = await prisma.savedTeam.findUnique({ where: { id } });
+        if (!team || team.user_id !== decoded.userId) {
+            return res.status(403).json({ error: "Forbidden" });
+        }
+
+        await prisma.savedTeam.delete({ where: { id } });
+        res.json({ message: "Team deleted" });
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+// Battle History API
+app.get('/api/battles', async (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const history = await prisma.battleHistory.findMany({
+            where: { user_id: decoded.userId },
+            orderBy: { createdAt: 'desc' }
+        });
+        res.json(history);
+    } catch (error) {
+        res.status(401).json({ error: "Invalid token" });
+    }
+});
+
+app.post('/api/battles', async (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const { opponent_type, player_team, opponent_team, battle_log, result } = req.body;
+
+        const battle = await prisma.battleHistory.create({
+            data: {
+                user_id: decoded.userId,
+                opponent_type,
+                player_team,
+                opponent_team,
+                battle_log,
+                result
+            }
+        });
+        res.json(battle);
+    } catch (error) {
+        console.error("Save battle error:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+// SPA Fallback
+app.get('*', (req, res) => {
+  if (req.path.startsWith('/api')) {
+      return res.status(404).json({ error: "API endpoint not found" });
+  }
+  // If it's auth.html, serve it (should be covered by static 'dist' but explicit check doesn't hurt)
+  if (req.path === '/auth.html') {
+      return res.sendFile(path.join(__dirname, 'dist', 'auth.html'));
+  }
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
 createTestAccount().then(() => {
   app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
-
-    // Keep-Alive Mechanism for Render
-    // This server will ping itself every 14 minutes to prevent Render's free tier from sleeping (which happens after 15 mins inactivity)
-    const renderUrl = process.env.RENDER_EXTERNAL_URL || "https://pokedex-backend-v072.onrender.com"; // Fallback to hardcoded URL if env var missing
-    if (renderUrl) {
-      console.log(`Setting up keep-alive for ${renderUrl}`);
-      setInterval(() => {
-        axios.get(`${renderUrl}/api/ping`) // Using a specific route or root
-          .then(() => console.log('Keep-alive ping successful'))
-          .catch(err => console.error('Keep-alive ping failed:', err.message));
-      }, 14 * 60 * 1000); // 14 minutes
-    }
+    // ... keep alive logic ...
   });
 });

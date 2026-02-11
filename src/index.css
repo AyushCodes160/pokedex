@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 20% 7%;
+    --foreground: 210 40% 95%;
+
+    --card: 220 18% 10%;
+    --card-foreground: 210 40% 95%;
+
+    --popover: 220 18% 10%;
+    --popover-foreground: 210 40% 95%;
+
+    --primary: 0 85% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 15% 16%;
+    --secondary-foreground: 210 40% 95%;
+
+    --muted: 220 15% 16%;
+    --muted-foreground: 215 15% 55%;
+
+    --accent: 45 100% 55%;
+    --accent-foreground: 220 20% 7%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 18%;
+    --input: 220 15% 18%;
+    --ring: 0 85% 55%;
+
+    --radius: 0.75rem;
+
+    --type-normal: 0 0% 65%;
+    --type-fire: 15 85% 55%;
+    --type-water: 210 85% 55%;
+    --type-grass: 120 55% 45%;
+    --type-electric: 50 100% 50%;
+    --type-ice: 195 80% 65%;
+    --type-fighting: 5 70% 45%;
+    --type-poison: 280 55% 50%;
+    --type-ground: 35 55% 50%;
+    --type-flying: 250 60% 65%;
+    --type-psychic: 340 80% 60%;
+    --type-bug: 80 60% 40%;
+    --type-rock: 45 40% 40%;
+    --type-ghost: 265 40% 45%;
+    --type-dragon: 260 80% 55%;
+    --type-dark: 0 0% 30%;
+    --type-steel: 210 15% 60%;
+    --type-fairy: 330 60% 65%;
+
+    --sidebar-background: 220 18% 10%;
+    --sidebar-foreground: 210 40% 95%;
+    --sidebar-primary: 0 85% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 15% 16%;
+    --sidebar-accent-foreground: 210 40% 95%;
+    --sidebar-border: 220 15% 18%;
+    --sidebar-ring: 0 85% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Orbitron', sans-serif;
+  }
+  .font-body {
+    font-family: 'Rajdhani', sans-serif;
+  }
+  .font-pixel {
+    font-family: 'Press Start 2P', cursive;
+  }
+  .gba-border {
+    border: 4px solid;
+    border-color: hsl(var(--foreground));
+    box-shadow: inset -2px -2px 0 0 hsl(var(--muted-foreground)), inset 2px 2px 0 0 hsl(var(--foreground));
+  }
+  .type-badge {
+    @apply px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider;
+  }
+}

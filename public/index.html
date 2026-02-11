@@ -23,8 +23,8 @@
     <header>
       <h1>Pokedex</h1>
       <div class="header-controls">
-        <button id="logout-btn">Logout</button>
-        <div class="theme-toggle" role="presentation">
+        <button id="logout-btn" class="desktop-only">Logout</button>
+        <div class="theme-toggle desktop-only" role="presentation">
         <input
           type="checkbox"
           id="theme-toggle"
@@ -56,8 +56,50 @@
           </span>
         </label>
       </div>
+      
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-btn" class="mobile-only" aria-label="Open Menu">
+        <i class="fas fa-bars"></i>
+      </button>
+
       </div>
     </header>
+
+    <!-- Mobile Sidebar -->
+    <div id="mobile-sidebar-overlay" class="mobile-sidebar-overlay"></div>
+    <aside id="mobile-sidebar" class="mobile-sidebar">
+      <div class="sidebar-header">
+        <h2>Menu</h2>
+        <button id="close-sidebar-btn" aria-label="Close Menu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="sidebar-content">
+        <div class="sidebar-item">
+          <span>Dark Mode</span>
+          <div class="theme-toggle" role="presentation">
+            <input
+              type="checkbox"
+              id="mobile-theme-toggle"
+              class="toggle-input"
+              aria-label="Toggle dark/light mode"
+            />
+            <label for="mobile-theme-toggle" class="toggle-switch">
+              <span class="icon sun" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Zm0-16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1Zm0 18a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1Zm10-9a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1ZM5 12a1 1 0 0 1-1 1H2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1Zm12.95 6.364a1 1 0 0 1-1.414 1.414l-1.414-1.414a1 1 0 0 1 1.414-1.414l1.414 1.414ZM8.878 6.636a1 1 0 0 1-1.414-1.414L8.878 3.808a1 1 0 1 1 1.414 1.414L8.878 6.636Zm8.657-3.535a1 1 0 1 1 1.414 1.414l-1.414 1.414a1 1 0 1 1-1.414-1.414l1.414-1.414ZM5.05 17.95a1 1 0 0 1-1.414-1.414l1.414-1.414a1 1 0 1 1 1.414 1.414L5.05 17.95Z"/></svg>
+              </span>
+              <span class="icon moon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z" /></svg>
+              </span>
+            </label>
+          </div>
+        </div>
+        
+        <button id="mobile-logout-btn" class="sidebar-btn logout">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </aside>
     <main class="pokedex-layout">
       <section class="sidebar">
         <input type="text" id="search" placeholder="Search Pokémon..." />

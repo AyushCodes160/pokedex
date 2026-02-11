@@ -241,3 +241,76 @@ showPokemonDetails = async function(id, name, skipViewSwitch = false) {
         showMobileDetails();
     }
 };
+
+// Mobile Sidebar Logic
+document.addEventListener("DOMContentLoaded", () => {
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileSidebar = document.getElementById('mobile-sidebar');
+    const mobileSidebarOverlay = document.getElementById('mobile-sidebar-overlay');
+    const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+    const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
+    const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
+
+    function openSidebar() {
+        mobileSidebar.classList.add('active');
+        mobileSidebarOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    function closeSidebar() {
+        mobileSidebar.classList.remove('active');
+        mobileSidebarOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', openSidebar);
+    }
+
+    if (closeSidebarBtn) {
+        closeSidebarBtn.addEventListener('click', closeSidebar);
+    }
+
+    if (mobileSidebarOverlay) {
+        mobileSidebarOverlay.addEventListener('click', closeSidebar);
+    }
+
+    // Mobile Logout Logic
+    if (mobileLogoutBtn) {
+        mobileLogoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'auth.html';
+        });
+    }
+
+    // Mobile Theme Toggle Sync
+    if (mobileThemeToggle) {
+        const savedTheme = localStorage.getItem("theme");
+        const prefersDark = savedTheme
+            ? savedTheme === "dark"
+            : window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        
+        mobileThemeToggle.checked = prefersDark;
+
+        mobileThemeToggle.addEventListener("change", () => {
+            const isDark = mobileThemeToggle.checked;
+            document.body.classList.toggle("dark-mode", isDark);
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+            
+            // Sync with desktop toggle if it exists
+            const desktopToggle = document.getElementById("theme-toggle");
+            if (desktopToggle) {
+                desktopToggle.checked = isDark;
+            }
+        });
+
+        // Sync from desktop to mobile if desktop toggle changes
+        const desktopToggle = document.getElementById("theme-toggle");
+        if (desktopToggle) {
+            desktopToggle.addEventListener("change", () => {
+                mobileThemeToggle.checked = desktopToggle.checked;
+            });
+        }
+    }
+});

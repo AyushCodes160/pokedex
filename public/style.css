@@ -1386,3 +1386,172 @@ body.dark-mode header {
     display: none;
   }
 }
+
+/* Mobile Menu Button */
+.mobile-only {
+  display: none !important;
+}
+
+#mobile-menu-btn {
+  background: transparent;
+  border: none;
+  color: #ffcb05;
+  /* Pokemon Yellow */
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  text-shadow: 2px 2px 0 #3c5aa6;
+  /* Pokemon Blue Stroke */
+}
+
+/* Mobile Sidebar Styling */
+.mobile-sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(2px);
+}
+
+.mobile-sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobile-sidebar {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  /* Start off-screen */
+  width: 280px;
+  height: 100%;
+  background: #ffffff;
+  z-index: 1000;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-sidebar.active {
+  transform: translateX(-300px);
+}
+
+.mobile-sidebar .sidebar-header {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-sidebar .sidebar-header h2 {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+}
+
+#close-sidebar-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: transform 0.2s;
+}
+
+#close-sidebar-btn:hover {
+  transform: rotate(90deg);
+}
+
+.mobile-sidebar .sidebar-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.mobile-sidebar .sidebar-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.mobile-sidebar .sidebar-item span {
+  font-weight: 600;
+  color: #333;
+}
+
+.mobile-sidebar .sidebar-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.2s;
+}
+
+.mobile-sidebar .sidebar-btn.logout {
+  background-color: #fee2e2;
+  color: #dc2626;
+  margin-top: auto;
+}
+
+.mobile-sidebar .sidebar-btn.logout:hover {
+  background-color: #fca5a5;
+}
+
+/* Dark Mode Overrides for Sidebar */
+body.dark-mode .mobile-sidebar {
+  background: #1e1e1e;
+  border-left: 1px solid #333;
+}
+
+body.dark-mode .mobile-sidebar .sidebar-header {
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  border-bottom: 1px solid #374151;
+}
+
+body.dark-mode .mobile-sidebar .sidebar-item {
+  border-bottom: 1px solid #333;
+}
+
+body.dark-mode .mobile-sidebar .sidebar-item span {
+  color: #e0e0e0;
+}
+
+body.dark-mode .mobile-sidebar .sidebar-btn.logout {
+  background-color: #7f1d1d;
+  color: #fecaca;
+}
+
+body.dark-mode .mobile-sidebar .sidebar-btn.logout:hover {
+  background-color: #b91c1c;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+
+  .mobile-only {
+    display: block !important;
+  }
+}

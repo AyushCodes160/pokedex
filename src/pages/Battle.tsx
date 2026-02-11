@@ -207,6 +207,15 @@ export default function Battle() {
           <Swords className="mx-auto mb-4 h-16 w-16 text-primary" />
           <h1 className="mb-2 font-display text-4xl font-black tracking-wider">BATTLE ARENA</h1>
           <p className="mb-8 text-muted-foreground">Choose your battle mode</p>
+
+          {/* Coming Soon Notice */}
+          <div className="mb-6 rounded-lg border-2 border-yellow-500/50 bg-yellow-500/10 p-4 text-center">
+            <p className="font-bold text-yellow-500">⚠️ COMING SOON</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              With some problems we are facing and we will fix it soon and this feature will be available sooon.
+            </p>
+          </div>
+
           <div className="flex flex-col gap-3">
             <Button size="lg" onClick={startQuickBattle} disabled={loading} className="font-display">
               {loading ? 'Preparing...' : '⚡ Quick Battle (Random 1v1)'}

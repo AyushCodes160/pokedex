@@ -43,6 +43,15 @@ export default function BattleHistory() {
   return (
     <div className="container py-8">
       <h1 className="mb-6 font-display text-3xl font-black tracking-wider">BATTLE HISTORY</h1>
+
+      {/* Coming Soon Notice */}
+      <div className="mb-6 rounded-lg border-2 border-yellow-500/50 bg-yellow-500/10 p-4 text-center">
+        <p className="font-bold text-yellow-500">⚠️ COMING SOON</p>
+        <p className="text-sm text-muted-foreground mt-1">
+          With some problems we are facing and we will fix it soon and this feature will be available sooon.
+        </p>
+      </div>
+
       {battles.length === 0 ? (
         <div className="flex flex-col items-center gap-4 py-16">
           <History className="h-12 w-12 text-muted-foreground" />

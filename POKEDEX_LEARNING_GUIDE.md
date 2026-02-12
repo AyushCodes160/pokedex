@@ -71,3 +71,18 @@ This project uses a variation of the MERN stack. Instead of using Mongoose direc
 
 ### Q: How did you implement the custom fonts?
 **A:** "I used Google Fonts and CDNFonts to import 'Orbitron' and 'Pocket Monk'. I configured Tailwind utilities to apply these fonts easily across components (`font-display`, `font-pokemon`), keeping the design consistent and thematic."
+
+---
+
+## 5. Deployment & DevOps
+
+### 🛑 Preventing Render Spin-down
+Render's free tier spins down web services after 15 minutes of inactivity, causing the next request to take 50+ seconds to load.
+
+**Solution:** Self-Ping Mechanism
+We implemented a self-ping strategy in `index.js`.
+1.  **Detection**: The app checks for the `RENDER_EXTERNAL_URL` environment variable (automatically set by Render).
+2.  **Interval**: If present, it sets up a `setInterval` to ping its own `/api/ping` endpoint every 14 minutes.
+3.  **Result**: This keeps the service "active" preventing the sleep cycle.
+
+**Alternative**: You can also use external monitoring services like `cron-job.org` to hit the URL, but the internal solution is self-contained.

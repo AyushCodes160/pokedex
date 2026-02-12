@@ -350,6 +350,17 @@ app.get('*', (req, res) => {
 createTestAccount().then(() => {
   app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
-    // ... keep alive logic ...
+    
+    // Self-ping to keep Render awake prevents spin-down
+    if (process.env.RENDER_EXTERNAL_URL) {
+      const pingUrl = `${process.env.RENDER_EXTERNAL_URL}/api/ping`;
+      console.log(`Setting up keep-alive ping for: ${pingUrl}`);
+      
+      setInterval(() => {
+        axios.get(pingUrl)
+          .then(() => console.log(`Keep-alive ping successful: ${new Date().toISOString()}`))
+          .catch(err => console.error(`Keep-alive ping failed: ${err.message}`));
+      }, 14 * 60 * 1000); // Ping every 14 minutes
+    }
   });
 });

@@ -4,6 +4,7 @@ export interface PokemonBasic {
   types: string[];
   sprite: string;
   artwork: string;
+  species?: string;
 }
 
 export interface PokemonStat {
@@ -131,6 +132,7 @@ export const GENERATIONS: Record<string, { name: string; range: [number, number]
   'generation-vii': { name: 'Gen VII (Alola)', range: [722, 809] },
   'generation-viii': { name: 'Gen VIII (Galar)', range: [810, 905] },
   'generation-ix': { name: 'Gen IX (Paldea)', range: [906, 1025] },
+  'forms': { name: 'Mega & Special Forms', range: [10001, 10400] },
 };
 
 export const ALL_TYPES = [

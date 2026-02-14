@@ -19,10 +19,14 @@ export async function fetchPokemonBasic(nameOrId: string | number): Promise<Poke
   const data: any = await cachedGet(`${API_BASE}/pokemon/${nameOrId}`);
   return {
     id: data.id,
-    name: data.name,
+    name: data.name
+      .split('-')
+      .map((s: string) => s.charAt(0).toUpperCase() + s.slice(1))
+      .join(' '),
     types: data.types.map((t: any) => t.type.name),
     sprite: data.sprites.front_default || '',
     artwork: data.sprites.other?.['official-artwork']?.front_default || data.sprites.front_default || '',
+    species: data.species?.name,
   };
 }
 
@@ -130,15 +134,29 @@ export async function searchPokemon(query: string): Promise<PokemonBasic[]> {
   if (!q) return [];
 
   // Try exact match by name or id
+  // Try exact match by name or id -> BUT don't return immediately, as we want variants
+  let exactMatch: PokemonBasic | null = null;
   try {
-    const pokemon = await fetchPokemonBasic(q);
-    return [pokemon];
-  } catch {
-    // If not found, search through list
-    const list = await cachedGet<any>(`${API_BASE}/pokemon?limit=1025&offset=0`);
-    const matches = list.results
-      .filter((p: any) => p.name.includes(q))
-      .slice(0, 12);
-    return Promise.all(matches.map((p: any) => fetchPokemonBasic(p.name)));
-  }
+    exactMatch = await fetchPokemonBasic(q);
+  } catch { /* ignore if not found */ }
+
+  // Search through list for variants (e.g. searching "charizard" should find "charizard-mega")
+  // If we found an exact match (e.g. "charizard-mega-x"), use its species name ("charizard") to find all variants
+  const searchTerm = exactMatch?.species || q;
+
+  const list = await cachedGet<any>(`${API_BASE}/pokemon?limit=2000&offset=0`);
+  const matches = list.results
+    .filter((p: any) => p.name.includes(searchTerm))
+    .slice(0, 20); // Increased slice to show more variants
+
+  const results = await Promise.all(matches.map((p: any) => fetchPokemonBasic(p.name)));
+
+  // If exact match exists and isn't in results (unlikely if loop works right, but safe), add it
+  // Actually, the loop will find "charizard" in the list if we search "charizard".
+  // So we just need to ensure we return the list results.
+
+  // If no list results but we had an exact match (e.g. searching by ID), return that
+  if (results.length === 0 && exactMatch) return [exactMatch];
+
+  return results;
 }

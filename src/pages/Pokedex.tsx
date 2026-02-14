@@ -33,16 +33,19 @@ export default function Pokedex() {
         const end = Math.min(start + PAGE_SIZE, gen.range[1]);
         if (start >= gen.range[1]) { setPokemon([]); setLoading(false); return; }
         const ids = Array.from({ length: end - start }, (_, i) => start + 1 + i);
-        const results = await Promise.all(ids.map(id => fetchPokemonBasic(id)));
-        setPokemon(applyFilters(results));
+        // Handle potential gaps (especially in forms range) by filtering nulls
+        const results = await Promise.all(
+          ids.map(id => fetchPokemonBasic(id).catch(() => null))
+        );
+        setPokemon(applyFilters(results.filter((p): p is PokemonBasic => p !== null)));
         setTotal(gen.range[1] - gen.range[0] + 1);
       } else {
         const data = await fetchPokemonList(page * PAGE_SIZE, PAGE_SIZE);
         setTotal(data.count);
         const results = await Promise.all(
-          data.results.map(p => fetchPokemonBasic(p.name))
+          data.results.map(p => fetchPokemonBasic(p.name).catch(() => null))
         );
-        setPokemon(applyFilters(results));
+        setPokemon(applyFilters(results.filter((p): p is PokemonBasic => p !== null)));
       }
     } catch { setPokemon([]); }
     setLoading(false);

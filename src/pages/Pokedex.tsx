@@ -1,10 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Search, Filter, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PokemonCard } from '@/components/PokemonCard';
-import { TypeBadge } from '@/components/TypeBadge';
 import { fetchPokemonBasic, fetchPokemonList, searchPokemon } from '@/lib/pokeapi';
 import { GENERATIONS, ALL_TYPES, type PokemonBasic } from '@/lib/pokemon-types';
 
@@ -13,43 +12,72 @@ const PAGE_SIZE = 24;
 export default function Pokedex() {
   const [pokemon, setPokemon] = useState<PokemonBasic[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(0);
-  const [total, setTotal] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
   const [search, setSearch] = useState('');
   const [genFilter, setGenFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [showFilters, setShowFilters] = useState(false);
 
-  const loadPage = useCallback(async () => {
+  const observerTarget = useRef<HTMLDivElement>(null);
+
+  const resetList = useCallback(() => {
+    setPokemon([]);
+    setPage(0);
+    setHasMore(true);
     setLoading(true);
+  }, []);
+
+  const loadPokemon = useCallback(async (currentPage: number, isNewSearch = false) => {
     try {
+      if (isNewSearch) setLoading(true);
+      else setLoadingMore(true);
+
+      let newPokemon: PokemonBasic[] = [];
+      let totalCount = 0;
+
       if (search.trim()) {
         const results = await searchPokemon(search);
-        setPokemon(applyFilters(results));
-        setTotal(results.length);
+        newPokemon = applyFilters(results);
+        setHasMore(false); // Search returns all results at once usually
       } else if (genFilter !== 'all') {
         const gen = GENERATIONS[genFilter];
-        const start = gen.range[0] - 1 + page * PAGE_SIZE;
+        const start = gen.range[0] - 1 + currentPage * PAGE_SIZE;
         const end = Math.min(start + PAGE_SIZE, gen.range[1]);
-        if (start >= gen.range[1]) { setPokemon([]); setLoading(false); return; }
-        const ids = Array.from({ length: end - start }, (_, i) => start + 1 + i);
-        // Handle potential gaps (especially in forms range) by filtering nulls
-        const results = await Promise.all(
-          ids.map(id => fetchPokemonBasic(id).catch(() => null))
-        );
-        setPokemon(applyFilters(results.filter((p): p is PokemonBasic => p !== null)));
-        setTotal(gen.range[1] - gen.range[0] + 1);
+
+        if (start >= gen.range[1]) {
+          setHasMore(false);
+        } else {
+          const ids = Array.from({ length: end - start }, (_, i) => start + 1 + i);
+          const results = await Promise.all(
+            ids.map(id => fetchPokemonBasic(id).catch(() => null))
+          );
+          newPokemon = applyFilters(results.filter((p): p is PokemonBasic => p !== null));
+          if (end >= gen.range[1]) setHasMore(false);
+        }
       } else {
-        const data = await fetchPokemonList(page * PAGE_SIZE, PAGE_SIZE);
-        setTotal(data.count);
+        const data = await fetchPokemonList(currentPage * PAGE_SIZE, PAGE_SIZE);
+        totalCount = data.count;
         const results = await Promise.all(
           data.results.map(p => fetchPokemonBasic(p.name).catch(() => null))
         );
-        setPokemon(applyFilters(results.filter((p): p is PokemonBasic => p !== null)));
+        newPokemon = applyFilters(results.filter((p): p is PokemonBasic => p !== null));
+        if (pokemon.length + newPokemon.length >= totalCount && !isNewSearch) setHasMore(false);
       }
-    } catch { setPokemon([]); }
-    setLoading(false);
-  }, [page, search, genFilter, typeFilter]);
+
+      if (isNewSearch) {
+        setPokemon(newPokemon);
+      } else {
+        setPokemon(prev => [...prev, ...newPokemon]);
+      }
+    } catch (error) {
+      console.error("Failed to load pokemon:", error);
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  }, [search, genFilter, typeFilter]);
 
   function applyFilters(list: PokemonBasic[]): PokemonBasic[] {
     let filtered = list;
@@ -59,10 +87,37 @@ export default function Pokedex() {
     return filtered;
   }
 
-  useEffect(() => { setPage(0); }, [search, genFilter, typeFilter]);
-  useEffect(() => { loadPage(); }, [loadPage]);
+  // Initial load and filter changes
+  useEffect(() => {
+    resetList();
+    loadPokemon(0, true);
+  }, [search, genFilter, typeFilter]);
 
-  const totalPages = Math.ceil(total / PAGE_SIZE);
+  // Infinite scroll observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting && hasMore && !loading && !loadingMore && !search.trim()) {
+          setPage(prevPage => {
+            const nextPage = prevPage + 1;
+            loadPokemon(nextPage, false);
+            return nextPage;
+          });
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [hasMore, loading, loadingMore, loadPokemon, search]);
 
   return (
     <div className="container py-8">
@@ -132,49 +187,30 @@ export default function Pokedex() {
       )}
 
       {/* Grid */}
-      {loading ? (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-          {Array.from({ length: PAGE_SIZE }).map((_, i) => (
-            <div key={i} className="h-52 animate-pulse rounded-xl bg-card" />
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-          {pokemon.map(p => (
-            <PokemonCard key={p.id} pokemon={p} />
-          ))}
-          {pokemon.length === 0 && (
-            <p className="col-span-full py-12 text-center text-muted-foreground">
-              No Pokémon found.
-            </p>
-          )}
-        </div>
-      )}
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        {pokemon.map(p => (
+          <PokemonCard key={p.id} pokemon={p} />
+        ))}
+        {loading && pokemon.length === 0 && Array.from({ length: PAGE_SIZE }).map((_, i) => (
+          <div key={i} className="h-52 animate-pulse rounded-xl bg-card" />
+        ))}
+        {pokemon.length === 0 && !loading && (
+          <p className="col-span-full py-12 text-center text-muted-foreground">
+            No Pokémon found.
+          </p>
+        )}
+      </div>
 
-      {/* Pagination */}
-      {!search.trim() && totalPages > 1 && (
-        <div className="mt-8 flex items-center justify-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={page === 0}
-            onClick={() => setPage(p => p - 1)}
-          >
-            Previous
-          </Button>
-          <span className="text-sm text-muted-foreground">
-            Page {page + 1} of {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={page >= totalPages - 1}
-            onClick={() => setPage(p => p + 1)}
-          >
-            Next
-          </Button>
-        </div>
-      )}
+      {/* Infinite Scroll Sentinel / Loading More Indicator */}
+      <div ref={observerTarget} className="mt-8 flex h-20 items-center justify-center">
+        {loadingMore && (
+          <div className="flex items-center gap-2">
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+            <span className="text-sm text-muted-foreground">Loading more Pokémon...</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
+

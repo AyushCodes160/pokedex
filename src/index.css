@@ -6,96 +6,6 @@
 @tailwind utilities;
 
 @layer base {
-
-  /* ... existing base styles ... */
-  :root {
-    /* Pokeball Theme (Light) */
-    --background: 0 0% 100%;
-    /* White */
-    --foreground: 222 47% 11%;
-    /* Dark Blue-Grey */
-    /* ... rest of the variables ... */
-  }
-
-  /* ... .dark class ... */
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-    font-family: 'Omega Ruby', sans-serif;
-  }
-}
-
-@layer utilities {
-  .font-display {
-    font-family: 'Omega Ruby', sans-serif;
-    /* Use Omega Ruby for headers too, unless specified otherwise */
-  }
-
-  .font-body {
-    font-family: 'Omega Ruby', sans-serif;
-  }
-
-  .font-pixel {
-    font-family: 'Press Start 2P', cursive;
-  }
-
-  .font-pokemon {
-    font-family: 'Pocket Monk', sans-serif;
-  }
-
-  /* Keep Logo strictly Pocket Monk */
-  .pokemon-logo-text {
-    font-family: 'Pocket Monk', sans-serif;
-    color: #ffcb05;
-    /* Pokemon Yellow */
-    -webkit-text-stroke: 1px #3c5aa6;
-    /* Pokemon Blue */
-    text-shadow: 2px 2px 0 #2a407c;
-    font-weight: 400;
-    letter-spacing: 1px;
-    font-size: 2rem;
-  }
-
-  /* ... rest of utilities ... */
-}
-
-@layer base {
-  /* ... existing base styles ... */
-}
-
-@layer utilities {
-  /* ... existing utilities ... */
-
-  .font-pixel {
-    font-family: 'Press Start 2P', cursive;
-  }
-
-  .font-pokemon {
-    font-family: 'Pocket Monk', sans-serif;
-  }
-
-  .pokemon-logo-text {
-    font-family: 'Pocket Monk', sans-serif;
-    color: #ffcb05;
-    /* Pokemon Yellow */
-    -webkit-text-stroke: 1px #3c5aa6;
-    /* Pokemon Blue - Thinner stroke for this font */
-    text-shadow: 2px 2px 0 #2a407c;
-    font-weight: 400;
-    /* Regular weight usually works best for brush fonts */
-    letter-spacing: 1px;
-    font-size: 2rem;
-    /* Larger for this font */
-  }
-}
-
-@layer base {
   :root {
     /* Pokeball Theme (Light) */
     --background: 0 0% 100%;
@@ -132,7 +42,7 @@
 
     --radius: 0.75rem;
 
-    /* Pokemon Types - Keep same or adjust if needed */
+    /* Pokemon Types */
     --type-normal: 0 0% 65%;
     --type-fire: 15 85% 55%;
     --type-water: 210 85% 55%;
@@ -213,21 +123,26 @@
   }
 
   body {
-    @apply bg-background text-foreground font-body;
+    @apply bg-background text-foreground;
+    font-family: 'Omega Ruby', sans-serif;
   }
 }
 
 @layer utilities {
   .font-display {
-    font-family: 'Orbitron', sans-serif;
+    font-family: 'Omega Ruby', sans-serif;
   }
 
   .font-body {
-    font-family: 'Rajdhani', sans-serif;
+    font-family: 'Omega Ruby', sans-serif;
   }
 
   .font-pixel {
     font-family: 'Press Start 2P', cursive;
+  }
+
+  .font-pokemon {
+    font-family: 'Pocket Monk', sans-serif;
   }
 
   .gba-border {
@@ -240,14 +155,17 @@
     @apply px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider;
   }
 
+  /* Keep Logo strictly Pocket Monk with Pokemon Yellow and Blue colors */
   .pokemon-logo-text {
+    font-family: 'Pocket Monk', sans-serif;
     color: #ffcb05;
     /* Pokemon Yellow */
     -webkit-text-stroke: 1.5px #3c5aa6;
     /* Pokemon Blue */
     text-shadow: 3px 3px 0 #2a407c;
-    font-weight: 900;
-    /* Extra Bold */
+    font-weight: 400;
+    /* Regular weight usually works best for brush fonts */
     letter-spacing: 1px;
+    font-size: 2rem;
   }
 }

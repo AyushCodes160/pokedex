@@ -14,9 +14,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Orbitron", "sans-serif"],
-        body: ["Rajdhani", "sans-serif"],
+        display: ["Omega Ruby", "sans-serif"],
+        body: ["Omega Ruby", "sans-serif"],
         pixel: ["Press Start 2P", "cursive"],
+        pokemon: ["Pocket Monk", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",

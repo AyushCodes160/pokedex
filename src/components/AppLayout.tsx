@@ -97,7 +97,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col">
       {/* Desktop top nav */}
-      <header className="sticky top-0 z-50 hidden border-b border-border bg-background/90 backdrop-blur-md md:block">
+      <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-md">
         <div className="container flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <span className="text-3xl tracking-wider pokemon-logo-text hover:scale-105 transition-transform pb-2">
@@ -105,7 +105,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             </span>
           </Link>
 
-          <nav className="flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-1">
             {navItems.map(item => (
               <Link
                 key={item.to}
@@ -126,7 +126,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="group relative flex h-9 w-9 items-center justify-center rounded-lg border border-border transition-colors hover:bg-accent hover:text-accent-foreground"
+              className="hidden md:flex group relative h-9 w-9 items-center justify-center rounded-lg border border-border transition-colors hover:bg-accent hover:text-accent-foreground"
               title={`Switch to ${theme === 'light' ? 'Dark (Ultra Ball)' : 'Light (Pokeball)'} Mode`}
             >
               {/* Show Ultra Ball when Light (to switch to Dark) */}
@@ -139,7 +139,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             {/* Auth Button */}
             {isLoggedIn ? (
               <div className="flex items-center gap-2">
-                <span className="mr-2 hidden text-sm font-bold text-muted-foreground md:inline-block">
+                <span className="mr-2 text-xs md:text-sm font-bold text-muted-foreground inline-block">
                   {userName ? `Hi, ${userName}` : 'Welcome'}
                 </span>
                 <button

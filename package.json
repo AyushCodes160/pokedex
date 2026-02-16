@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "server": "node index.js",
+    "server": "vite build && node index.js",
     "start": "node index.js",
     "build": "vite build",
     "postinstall": "prisma generate",

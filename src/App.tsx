@@ -9,7 +9,6 @@ import Pokedex from "./pages/Pokedex";
 import PokemonDetail from "./pages/PokemonDetail";
 import TeamBuilder from "./pages/TeamBuilder";
 import Battle from "./pages/Battle";
-import BattleHistory from "./pages/BattleHistory";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import { RequireAuth } from "./components/RequireAuth";
@@ -29,7 +28,6 @@ const App = () => (
             <Route path="/pokemon/:id" element={<RequireAuth><PokemonDetail /></RequireAuth>} />
             <Route path="/team-builder" element={<RequireAuth><TeamBuilder /></RequireAuth>} />
             <Route path="/battle" element={<RequireAuth><Battle /></RequireAuth>} />
-            <Route path="/history" element={<RequireAuth><BattleHistory /></RequireAuth>} />
             <Route path="/auth" element={<Auth />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

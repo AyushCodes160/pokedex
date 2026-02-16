@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, BookOpen, Swords, Users, LogIn, LogOut, History } from 'lucide-react';
+import { Home, BookOpen, Swords, Users, LogIn, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -9,7 +9,6 @@ const navItems = [
   { to: '/pokedex', icon: BookOpen, label: 'Pokédex' },
   { to: '/team-builder', icon: Users, label: 'Teams' },
   { to: '/battle', icon: Swords, label: 'Battle' },
-  { to: '/history', icon: History, label: 'History' },
 ];
 
 const PokeballIcon = ({ className }: { className?: string }) => (

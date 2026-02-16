@@ -7,7 +7,6 @@ A feature-rich, modern Pokedex application with Team Builder and Battle Arena ca
 -   **Pokedex**: Browse detailed information about Pokemon species, stats, types, and moves.
 -   **Team Builder**: Create, manage, and save your own custom Pokemon teams.
 -   **Battle Arena**: *(Coming Soon)* Simulate battles with your teams against AI opponents.
--   **Battle History**: *(Coming Soon)* View your past battle records and outcomes.
 -   **Authentication**: Secure user accounts with Sign Up, Sign In, and Logout functionality (JWT + bcrypt).
 -   **Responsive Design**: Fully responsive UI for Desktop and Mobile.
 -   **Custom Theming**: Unique "Pokemon Arena" branding with custom fonts ("Pocket Monk") and dynamic UI elements.

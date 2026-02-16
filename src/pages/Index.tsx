@@ -15,7 +15,6 @@ export default function Index() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load 8 random featured Pokémon
     const ids = Array.from({ length: 8 }, () => Math.floor(Math.random() * 898) + 1);
     Promise.all(ids.map(id => fetchPokemonBasic(id)))
       .then(setFeatured)
@@ -31,102 +30,134 @@ export default function Index() {
   };
 
   return (
-    <div className="relative">
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border py-20 md:py-32">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
-        <div className="container relative text-center">
+    <div className="relative min-h-screen font-sans text-foreground">
+      <div
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: 'url("/home1.png")' }}
+      >
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+      </div>
+
+      <div className="relative z-10 flex min-h-screen flex-col">
+        <section className="flex flex-1 flex-col items-center justify-center px-4 py-20 text-center md:py-32">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8, ease: "circOut" }}
+            className="mb-12 max-w-4xl"
           >
-            <h1 className="mb-4 font-display text-4xl font-black tracking-wider md:text-6xl">
-              POKÉDEX <span className="text-primary">BATTLE</span> ARENA
+            <h1 className="mb-6 font-display text-5xl font-black tracking-tight text-white drop-shadow-lg md:text-7xl lg:text-8xl">
+              POKÉDEX <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-orange-500">ARENA</span>
             </h1>
-            <p className="mx-auto mb-8 max-w-lg text-lg text-muted-foreground">
-              Browse all 1000+ Pokémon. Build your team. Battle GBA-style.
+            <p className="mx-auto max-w-2xl text-xl text-white/90 drop-shadow-md md:text-2xl">
+              Explore the world of Pokémon. Build your team. Become the champion.
             </p>
           </motion.div>
 
-          {/* Search */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mx-auto flex max-w-md gap-2"
+            className="w-full max-w-2xl rounded-2xl bg-white/10 p-2 backdrop-blur-xl border border-white/20 shadow-2xl"
           >
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <div className="relative flex items-center">
+              <Search className="absolute left-4 h-6 w-6 text-white/70" />
               <Input
-                placeholder="Search by name or number..."
+                placeholder="Search Pokémon by name or number..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleSearch()}
-                className="pl-9"
+                className="h-14 border-none bg-transparent pl-14 text-lg text-white placeholder:text-white/50 focus-visible:ring-0 focus-visible:ring-offset-0"
               />
+              <Button
+                onClick={handleSearch}
+                size="lg"
+                className="ml-2 h-12 rounded-xl bg-primary px-8 font-bold text-white hover:bg-primary/90 shadow-lg transition-all hover:scale-105"
+              >
+                Search
+              </Button>
             </div>
-            <Button onClick={handleSearch}>Search</Button>
           </motion.div>
 
-          {/* Quick actions */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="mt-8 flex flex-wrap justify-center gap-3"
+            className="mt-10 flex flex-wrap justify-center gap-4"
           >
-            <Button variant="outline" asChild>
+            <Button
+              variant="outline"
+              size="lg"
+              asChild
+              className="h-12 rounded-xl border-white/20 bg-black/40 text-white backdrop-blur-md hover:bg-white/20 hover:text-white border-2 hover:border-white/40 transition-all"
+            >
               <Link to="/pokedex">
-                <BookOpen className="mr-2 h-4 w-4" />
+                <BookOpen className="mr-2 h-5 w-5" />
                 Browse Pokédex
               </Link>
             </Button>
-            <Button asChild>
+            <Button
+              size="lg"
+              asChild
+              className="h-12 rounded-xl bg-gradient-to-r from-red-600 to-red-500 text-white shadow-lg hover:from-red-500 hover:to-red-400 border-2 border-transparent transition-all hover:scale-105"
+            >
               <Link to="/battle">
-                <Swords className="mr-2 h-4 w-4" />
-                Start Battle
+                <Swords className="mr-2 h-5 w-5" />
+                Battle Arena
               </Link>
             </Button>
           </motion.div>
-        </div>
-      </section>
+        </section>
 
-      {/* Featured / Search Results */}
-      <section className="container py-12">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="font-display text-xl font-bold tracking-wide">
-            {searchResults ? 'Search Results' : 'Featured Pokémon'}
-          </h2>
-          {!searchResults && (
-            <Link
-              to="/pokedex"
-              className="flex items-center gap-1 text-sm text-primary hover:underline"
-            >
-              View all <ChevronRight className="h-4 w-4" />
-            </Link>
-          )}
-        </div>
+        {(featured.length > 0 || searchResults) && (
+          <section className="container mx-auto px-4 pb-20">
+            <div className="rounded-3xl bg-black/40 backdrop-blur-xl border border-white/10 p-8 shadow-2xl">
+              <div className="mb-8 flex items-center justify-between">
+                <h2 className="font-display text-3xl font-bold text-white tracking-wide drop-shadow-sm">
+                  {searchResults ? 'Search Results' : 'Featured Pokémon'}
+                </h2>
+                {!searchResults && (
+                  <Link
+                    to="/pokedex"
+                    className="group flex items-center gap-2 text-sm font-medium text-white/80 transition-colors hover:text-white"
+                  >
+                    View all
+                    <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                )}
+              </div>
 
-        {loading ? (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="h-52 animate-pulse rounded-xl bg-card" />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-            {(searchResults || featured).map(pokemon => (
-              <PokemonCard key={pokemon.id} pokemon={pokemon} />
-            ))}
-            {searchResults?.length === 0 && (
-              <p className="col-span-full text-center text-muted-foreground">
-                No Pokémon found. Try another search.
-              </p>
-            )}
-          </div>
+              {loading ? (
+                <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <div key={i} className="aspect-[2/3] animate-pulse rounded-2xl bg-white/5" />
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                  {(searchResults || featured).map(pokemon => (
+                    <div key={pokemon.id} className="transition-transform hover:scale-105">
+                      <PokemonCard pokemon={pokemon} />
+                    </div>
+                  ))}
+                  {searchResults?.length === 0 && (
+                    <div className="col-span-full py-20 text-center">
+                      <p className="text-2xl text-white/60">No Pokémon found matching your search.</p>
+                      <Button
+                        variant="link"
+                        onClick={() => { setSearchQuery(''); setSearchResults(null); }}
+                        className="mt-4 text-primary text-lg"
+                      >
+                        Clear search
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </section>
         )}
-      </section>
+      </div>
     </div>
   );
 }

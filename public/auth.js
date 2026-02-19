@@ -14,6 +14,18 @@ signInButton.addEventListener('click', () => {
 const signupForm = document.getElementById('signup-form');
 const signupError = document.getElementById('signup-error');
 
+// Guest Logic
+const guestButtons = document.querySelectorAll('.guest-btn');
+guestButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        localStorage.setItem('isGuest', 'true');
+        // Clear any existing user data to avoid confusion
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/';
+    });
+});
+
 signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     signupError.textContent = '';
@@ -66,6 +78,7 @@ loginForm.addEventListener('submit', async (e) => {
         if (response.ok) {
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
+            localStorage.removeItem('isGuest');
             window.location.href = '/';
         } else {
             loginError.textContent = data.error || 'Login failed';

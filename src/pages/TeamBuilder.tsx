@@ -190,7 +190,7 @@ export default function TeamBuilder() {
 
   return (
     <div className="container py-8">
-      <h1 className="mb-6 font-display text-3xl font-black tracking-wider">TEAM BUILDER</h1>
+      <h1 className="mb-6 font-display text-3xl font-black tracking-wider text-foreground">TEAM BUILDER</h1>
 
       <div className="grid gap-8 lg:grid-cols-12">
         <div className="lg:col-span-8">
@@ -239,7 +239,7 @@ export default function TeamBuilder() {
           {/* Add Pokémon */}
           {team.length < 6 && (
             <div className="rounded-xl border border-border bg-card p-4">
-              <h2 className="mb-4 font-display text-lg font-bold">Add Pokémon</h2>
+              <h2 className="mb-4 font-display text-lg font-bold text-foreground">Add Pokémon</h2>
 
               <div className="mb-4 flex gap-2">
                 <div className="relative flex-1">
@@ -268,7 +268,7 @@ export default function TeamBuilder() {
                       className="rounded-lg border border-border p-2 text-center transition-colors hover:border-primary/50"
                     >
                       <img src={p.artwork || p.sprite} alt={p.name} className="mx-auto h-14 w-14 object-contain" />
-                      <p className="text-xs font-semibold capitalize">{p.name}</p>
+                      <p className="text-xs font-semibold capitalize text-foreground">{p.name}</p>
                     </button>
                   ))}
                 </div>
@@ -278,9 +278,9 @@ export default function TeamBuilder() {
               {selectedPokemon && (
                 <div>
                   <div className="mb-4 flex items-center gap-4">
-                    <img src={selectedPokemon.artwork} alt={selectedPokemon.name} className="h-20 w-20 object-contain" />
+                    <img src={selectedPokemon.artwork || selectedPokemon.sprite} alt={selectedPokemon.name} className="h-20 w-20 object-contain" />
                     <div>
-                      <h3 className="font-display text-lg font-bold capitalize">{selectedPokemon.name}</h3>
+                      <h3 className="font-display text-lg font-bold capitalize text-foreground">{selectedPokemon.name}</h3>
                       <div className="flex gap-1">{selectedPokemon.types.map(t => <TypeBadge key={t} type={t} size="sm" />)}</div>
                       <div className="mt-2 flex items-center gap-2">
                         <label className="text-sm text-muted-foreground">Level:</label>
@@ -301,7 +301,9 @@ export default function TeamBuilder() {
                   </p>
 
                   {loadingMoves ? (
-                    <p className="text-sm text-muted-foreground">Loading moves...</p>
+                    <div className="flex justify-center p-8">
+                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    </div>
                   ) : (
                     <div className="mb-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
                       {availableMoves.map(move => {
@@ -316,7 +318,7 @@ export default function TeamBuilder() {
                           >
                             <div className="flex items-center gap-2">
                               <TypeBadge type={move.type} size="sm" />
-                              <span className="capitalize">{move.name.replace('-', ' ')}</span>
+                              <span className="capitalize text-foreground">{move.name.replace('-', ' ')}</span>
                             </div>
                             <span className="text-xs text-muted-foreground">
                               {move.power || '—'} / {move.accuracy || '—'}
@@ -346,7 +348,7 @@ export default function TeamBuilder() {
           <div className="rounded-xl border border-border bg-card p-4 h-fit">
             <div className="mb-4 flex items-center gap-2">
               <FolderOpen className="h-5 w-5 text-primary" />
-              <h2 className="font-display text-lg font-bold">My Saved Teams</h2>
+              <h2 className="font-display text-lg font-bold text-foreground">My Saved Teams</h2>
             </div>
 
             {loadingTeams ? (
@@ -363,7 +365,7 @@ export default function TeamBuilder() {
                   <div key={st.id} className="group relative rounded-lg border border-border bg-secondary p-3 transition-colors hover:border-primary/50">
                     <div className="flex items-center justify-between gap-2">
                       <div className="overflow-hidden">
-                        <p className="truncate text-sm font-bold">{st.name}</p>
+                        <p className="truncate text-sm font-bold text-foreground">{st.name}</p>
                         <p className="text-[10px] text-muted-foreground">
                           {st.team_data.length} Pokemon • {new Date(st.updatedAt).toLocaleDateString()}
                         </p>

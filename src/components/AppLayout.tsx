@@ -3,6 +3,8 @@ import { Home, BookOpen, Swords, Users, LogIn, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { PokeballIcon, UltraBallIcon } from './Icons';
+import { FloatingBackground } from './FloatingBackground';
 
 const navItems = [
   { to: '/', icon: Home, label: 'Home' },
@@ -11,28 +13,6 @@ const navItems = [
   { to: '/battle', icon: Swords, label: 'Battle' },
 ];
 
-const PokeballIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="50" cy="50" r="45" fill="white" stroke="currentColor" strokeWidth="5" />
-    <path d="M5 50 H95" stroke="currentColor" strokeWidth="5" />
-    <path d="M50 5 A45 45 0 0 1 95 50 H5 A45 45 0 0 1 50 5 Z" fill="#EE1515" />
-    <circle cx="50" cy="50" r="15" fill="white" stroke="currentColor" strokeWidth="5" />
-    <circle cx="50" cy="50" r="10" fill="white" />
-  </svg>
-);
-
-const UltraBallIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="50" cy="50" r="45" fill="white" stroke="currentColor" strokeWidth="5" />
-    <path d="M5 50 H95" stroke="currentColor" strokeWidth="5" />
-    <path d="M50 5 A45 45 0 0 1 95 50 H5 A45 45 0 0 1 50 5 Z" fill="#2a2a2a" />
-    {/* Ultra Ball H shape */}
-    <path d="M20 20 Q50 60 80 20" stroke="#FCD116" strokeWidth="8" fill="none" />
-    <path d="M50 5 V25" stroke="#FCD116" strokeWidth="0" />
-    <circle cx="50" cy="50" r="15" fill="white" stroke="currentColor" strokeWidth="5" />
-    <circle cx="50" cy="50" r="10" fill="white" />
-  </svg>
-);
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
@@ -96,6 +76,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <FloatingBackground theme={theme} />
       {/* Desktop top nav */}
       <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-md">
         <div className="container flex h-16 items-center justify-between">
@@ -162,7 +143,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       </header>
 
       {/* Main content */}
-      <main className="flex-1 pb-20 md:pb-0">{children}</main>
+      <main className="relative z-10 flex-1 pb-20 md:pb-0">{children}</main>
 
       {/* Mobile bottom nav */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/95 backdrop-blur-md md:hidden">

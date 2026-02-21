@@ -31,12 +31,6 @@ export default function Index() {
 
   return (
     <div className="relative min-h-screen font-sans text-foreground">
-      <div
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: 'url("/home1.png")' }}
-      >
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
-      </div>
 
       <div className="relative z-10 flex min-h-screen flex-col">
         <section className="flex flex-1 flex-col items-center justify-center px-4 py-20 text-center md:py-32">

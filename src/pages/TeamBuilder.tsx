@@ -21,6 +21,7 @@ export default function TeamBuilder() {
   const [user, setUser] = useState<any>(null);
   const [savedTeams, setSavedTeams] = useState<any[]>([]);
   const [loadingTeams, setLoadingTeams] = useState(false);
+  const [searching, setSearching] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -33,6 +34,18 @@ export default function TeamBuilder() {
       fetchTeams(token);
     }
   }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (search.trim().length >= 2) {
+        handleSearch();
+      } else if (search.trim().length === 0) {
+        setSearchResults([]);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [search]);
 
   const fetchTeams = async (token: string) => {
     setLoadingTeams(true);
@@ -77,9 +90,19 @@ export default function TeamBuilder() {
   };
 
   const handleSearch = async () => {
-    if (!search.trim()) return;
-    const results = await searchPokemon(search);
-    setSearchResults(results);
+    if (!search.trim()) {
+      setSearchResults([]);
+      return;
+    }
+    setSearching(true);
+    try {
+      const results = await searchPokemon(search);
+      setSearchResults(results);
+    } catch (error) {
+      console.error("Search failed", error);
+    } finally {
+      setSearching(false);
+    }
   };
 
   const selectPokemon = async (p: PokemonBasic) => {
@@ -225,11 +248,14 @@ export default function TeamBuilder() {
                     placeholder="Search Pokémon..."
                     value={search}
                     onChange={e => setSearch(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && handleSearch()}
                     className="pl-9"
                   />
+                  {searching && (
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                    </div>
+                  )}
                 </div>
-                <Button onClick={handleSearch}>Search</Button>
               </div>
 
               {/* Search results */}

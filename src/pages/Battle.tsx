@@ -310,7 +310,7 @@ export default function Battle() {
       initial={{ y: 0, opacity: 0, scale: 0.5 }}
       animate={{ y: -100, opacity: 1, scale: [1, 1.5, 1.2] }}
       className={`absolute z-30 font-display text-4xl font-black italic tracking-tighter ${effectiveness > 1 ? 'text-yellow-400' : effectiveness < 1 ? 'text-slate-400' : 'text-white'} drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)]`}
-      style={{ left: side === 'opponent' ? '25%' : '75%', top: '40%' }}
+      style={{ left: side === 'player' ? '25%' : '75%', top: '40%' }}
     >
       -{value}
       {effectiveness > 1 && <span className="block text-xs font-bold uppercase tracking-widest text-yellow-500">SUPER EFFECTIVE</span>}
@@ -459,35 +459,6 @@ export default function Battle() {
             {/* Combatants Positioning */}
             <div className="relative z-20 flex h-full items-center justify-between px-4 sm:px-8 md:px-24">
 
-              {/* Opponent Side */}
-              <div className="flex flex-col items-center">
-                {opponent && (
-                  <motion.div
-                    initial={{ x: 100, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    className="flex flex-col items-center gap-4 sm:gap-8"
-                  >
-                    <HealthBar pokemon={opponent} side="opponent" />
-                    <div className="relative">
-                      <motion.img
-                        src={opponent.sprite}
-                        alt={opponent.name}
-                        className="h-32 w-32 sm:h-48 sm:w-48 object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] filter brightness-110"
-                        animate={animating ? {
-                          x: [0, -10, 10, 0],
-                          filter: ['brightness(1)', 'brightness(2)', 'brightness(1)']
-                        } : {
-                          y: [0, -10, 0]
-                        }}
-                        transition={animating ? { duration: 0.3 } : { duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                      />
-                      {/* Reflection/Shadow */}
-                      <div className="absolute -bottom-4 sm:-bottom-8 left-1/2 h-4 w-24 sm:w-32 -translate-x-1/2 rounded-full bg-black/40 blur-xl" />
-                    </div>
-                  </motion.div>
-                )}
-              </div>
-
               {/* Player Side */}
               <div className="flex flex-col items-center">
                 {player && (
@@ -501,7 +472,7 @@ export default function Battle() {
                       <motion.img
                         src={player.sprite}
                         alt={player.name}
-                        className="h-40 w-40 sm:h-64 sm:w-64 object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] filter brightness-125 [transform:scaleX(-1)]"
+                        className="h-40 w-40 sm:h-64 sm:w-64 object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] filter brightness-125"
                         animate={animating ? {
                           x: [0, 10, -10, 0],
                           filter: ['brightness(1)', 'brightness(2)', 'brightness(1)']
@@ -512,6 +483,35 @@ export default function Battle() {
                       />
                       {/* Reflection/Shadow */}
                       <div className="absolute -bottom-4 sm:-bottom-8 left-1/2 h-4 sm:h-6 w-32 sm:w-48 -translate-x-1/2 rounded-full bg-black/50 blur-xl" />
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+
+              {/* Opponent Side */}
+              <div className="flex flex-col items-center">
+                {opponent && (
+                  <motion.div
+                    initial={{ x: 100, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    className="flex flex-col items-center gap-4 sm:gap-8"
+                  >
+                    <HealthBar pokemon={opponent} side="opponent" />
+                    <div className="relative">
+                      <motion.img
+                        src={opponent.sprite}
+                        alt={opponent.name}
+                        className="h-32 w-32 sm:h-48 sm:w-48 object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] filter brightness-110 [transform:scaleX(-1)]"
+                        animate={animating ? {
+                          x: [0, -10, 10, 0],
+                          filter: ['brightness(1)', 'brightness(2)', 'brightness(1)']
+                        } : {
+                          y: [0, -10, 0]
+                        }}
+                        transition={animating ? { duration: 0.3 } : { duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                      />
+                      {/* Reflection/Shadow */}
+                      <div className="absolute -bottom-4 sm:-bottom-8 left-1/2 h-4 w-24 sm:w-32 -translate-x-1/2 rounded-full bg-black/40 blur-xl" />
                     </div>
                   </motion.div>
                 )}

@@ -205,7 +205,7 @@ export default function Battle() {
       <div className="flex min-h-[80vh] items-center justify-center px-4">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center">
           <Swords className="mx-auto mb-4 h-16 w-16 text-primary" />
-          <h1 className="mb-2 font-display text-4xl font-black tracking-wider">BATTLE ARENA</h1>
+          <h1 className="mb-2 font-display text-4xl font-black tracking-wider text-primary">BATTLE ARENA</h1>
           <p className="mb-8 text-muted-foreground">Choose your battle mode</p>
 
           {/* Coming Soon Notice */}

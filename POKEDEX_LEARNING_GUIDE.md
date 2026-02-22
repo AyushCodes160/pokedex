@@ -8,43 +8,39 @@ This document is designed to help you understand the specific technologies, arch
 
 ### Frontend
 -   **React (v18):** UI library for building component-based interfaces.
--   **Vite:** Next-generation frontend tooling for fast development and optimized builds.
--   **TypeScript:** Adds static typing to JavaScript, improving code quality and developer experience.
--   **Tailwind CSS:** Utility-first CSS framework for rapid, responsive styling.
--   **Shadcn UI:** Reusable components built with Radix UI and Tailwind CSS.
--   **Framer Motion:** Library for declarative, production-ready animations.
--   **Recharts:** Composable charting library for visualizing stats.
+-   **Vite:** Next-generation frontend tooling for fast development and optimized builds. (Configured for port **8080**).
+-   **TypeScript:** Adds static typing to JavaScript for improved safety.
+-   **Tailwind CSS:** Utility-first CSS framework for rapid styling.
+-   **Shadcn UI:** Reusable components built with Radix UI and Tailwind.
+-   **Framer Motion:** Powering the **3D Battle Arena** perspective and smooth UI transitions.
+-   **Recharts:** Visualizing Pokemon stats with composable charts.
 
 ### Backend
--   **Node.js & Express:** Runtime and framework for the REST API server.
--   **Prisma ORM:** Next-generation ORM for type-safe database access.
--   **MongoDB:** NoSQL database used to store Users, Teams, and Battle History.
--   **JWT (JSON Web Tokens):** Standard for stateless authentication.
--   **bcryptjs:** Library for hashing passwords securely.
+-   **Node.js & Express:** REST API server (Running on port **3000**).
+-   **Prisma ORM:** Type-safe database access for MongoDB.
+-   **MongoDB:** NoSQL database for Users, Teams, and Battle Results.
+-   **JWT & bcryptjs:** Secure stateless authentication and password hashing.
 
 ---
 
 ## 2. Key Concepts & Architecture
 
 ### 🔄 The MERN Stack (with Prisma)
-This project uses a variation of the MERN stack. Instead of using Mongoose directly, we use **Prisma** to interact with **MongoDB**.
--   **Why Prisma?** It provides auto-generated type definitions (`.d.ts`), making database queries type-safe. If you change your schema, TypeScript warns you about breaking changes in your code instantly.
+We use **Prisma** as the data layer because it provides auto-generated types that catch errors during development. 
+
+### ⚔️ Apex Arena Mechanics
+The Battle Arena implementation uses advanced techniques:
+-   **3D Perspective**: Built using CSS `perspective` and `transform-style: preserve-3d`, with Framer Motion handling the "floating" feeling of the combatants.
+-   **Turn-Based Logic**: Uses a speed-based sequence where the faster Pokemon attacks first. The logic is encapsulated in an `async` sequence to ensure animations play out chronologically.
+-   **Damage Calculation**: Implements the official Pokemon damage formula, including Type Effectiveness, STAB (Same-Type Attack Bonus), and Critical Hits.
+
+### 🌗 Dynamic Theming
+-   **Poke Ball / Ultra Ball Toggle**: A custom theme provider that switches between Dark and Light modes.
+-   **Implementation**: Uses `document.documentElement.classList` to toggle the `.dark` class, which Tailwind uses to apply different color variables. The icons themselves are custom SVG components that rotate and scale on toggle.
 
 ### 🔐 Authentication Flow
-1.  **Sign Up**: User provides credentials. Password is hashed with `bcrypt` (salt + hash) before saving to the DB. NEVER save plain-text passwords.
-2.  **Sign In**: User provides credentials. Server finds the user, compares the basic password with the hashed one using `bcrypt.compare()`.
-3.  **Token Generation**: If valid, server generates a **JWT** signed with a `SECRET_KEY`. This token is sent to the client.
-4.  **Client Storage**: The React app stores this token in `localStorage`.
-5.  **Protected Routes**: When the user accesses `/team-builder`, the app checks for the token. If missing, it redirects to `/auth`.
-6.  **Authenticated Requests**: API requests (like "Save Team") include the token in headers. The backend verifies the signature before processing.
-
-### 🎨 Styling & Theming
--   **Tailwind Config**: We customized `tailwind.config.ts` to include specific fonts (`font-pixel`, `font-display`, `font-pokemon`) and colors (`pokemon-yellow`, `pokemon-blue`) to match the brand.
--   **Global CSS**: `index.css` handles font imports (from CDNs) and special text effects (like the stroke on the "Pokemon Arena" logo).
-
-### 🚀 Deployment Strategy
--   **Hybrid Serving**: In development, we run two servers (Vite for HMR, Express for API). In production (Render), we build the React app to static files (`dist/`) and tell Express to serve those static files along with the API routes.
--   **Build Process**: `npm run build` compiles TypeScript/React into optimized HTML/CSS/JS. The `postinstall` script ensures `prisma generate` runs so the database client is ready on the cloud server.
+1.  **JWT Strategy**: Tokens are stored in `localStorage` and sent in the `Authorization` header for protected actions like saving a team.
+2.  **Auth Guard**: The `AppLayout` component re-verifies auth state on every route change.
 
 ---
 
@@ -52,37 +48,22 @@ This project uses a variation of the MERN stack. Instead of using Mongoose direc
 
 -   **React Hooks**: [React Official Docs - Hooks](https://react.dev/reference/react)
 -   **Prisma with MongoDB**: [Prisma Mongo Guide](https://www.prisma.io/docs/concepts/database-connectors/mongodb)
--   **JWT Auth**: [JWT.io Introduction](https://jwt.io/introduction)
--   **Tailwind CSS**: [Tailwind Docs](https://tailwindcss.com/docs)
--   **Vite**: [Why Vite?](https://vitejs.dev/guide/why.html)
+-   **Framer Motion**: [Animation Guides](https://www.framer.com/motion/)
+-   **Tailwind CSS**: [Docs](https://tailwindcss.com/docs)
 
 ---
 
 ## 4. Common Interview Questions
 
-### Q: Why did you choose Prisma over Mongoose?
-**A:** "I chose Prisma for its strong type safety and auto-completion features. It integrates perfectly with TypeScript, significantly reducing runtime errors compared to Mongoose's flexible but looser schema definition."
+### Q: Why use a 3D perspective for a 2D sprite game?
+**A:** "It creates a more immersive 'Arena' feel without the overhead of a full 3D engine like Three.js. By using CSS 3D transforms and Framer Motion, we achieve a premium look that stays lightweight and performant."
 
-### Q: How do you handle Authentication state?
-**A:** "I verify the JWT token presence in `localStorage` on app initialization. The `AppLayout` component listens for storage events to update the UI (showing 'Logout' vs 'Sign In') dynamiclly without needing a page refresh."
-
-### Q: How does the application handle data persistence?
-**A:** "All critical data (Users, Teams, History) is stored in MongoDB. The schema is defined in `schema.prisma`, which serves as the single source of truth for the data model."
-
-### Q: How did you implement the custom fonts?
-**A:** "I used Google Fonts and CDNFonts to import 'Orbitron' and 'Pocket Monk'. I configured Tailwind utilities to apply these fonts easily across components (`font-display`, `font-pokemon`), keeping the design consistent and thematic."
+### Q: How did you solve the battle 'hang' bug?
+**A:** "I refactored the turn logic to handle speed-based move ordering within a single `executeMove` transaction. I used a `try...finally` block to ensure the 'animating' state is always reset, preventing the UI from locking up if something fails."
 
 ---
 
 ## 5. Deployment & DevOps
 
 ### 🛑 Preventing Render Spin-down
-Render's free tier spins down web services after 15 minutes of inactivity, causing the next request to take 50+ seconds to load.
-
-**Solution:** Self-Ping Mechanism
-We implemented a self-ping strategy in `index.js`.
-1.  **Detection**: The app checks for the `RENDER_EXTERNAL_URL` environment variable (automatically set by Render).
-2.  **Interval**: If present, it sets up a `setInterval` to ping its own `/api/ping` endpoint every 14 minutes.
-3.  **Result**: This keeps the service "active" preventing the sleep cycle.
-
-**Alternative**: You can also use external monitoring services like `cron-job.org` to hit the URL, but the internal solution is self-contained.
+Render's free tier sleeps after 15 minutes. We use a **Self-Ping Mechanism** in `index.js` to keep the service awake by hitting the `/api/ping` endpoint every 14 minutes.

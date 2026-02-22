@@ -4,12 +4,12 @@ A feature-rich, modern Pokedex application with Team Builder and Battle Arena ca
 
 ## 🚀 Features
 
--   **Pokedex**: Browse detailed information about Pokemon species, stats, types, and moves.
--   **Team Builder**: Create, manage, and save your own custom Pokemon teams.
--   **Battle Arena**: *(Coming Soon)* Simulate battles with your teams against AI opponents.
+-   **Pokedex**: Browse detailed information about Pokemon species, stats, types, and moves with advanced filtering by Generation and Type.
+-   **Team Builder**: Create, manage, and save your own custom Pokemon teams with up to 6 members, each with 4 custom moves.
+-   **Apex Arena**: Engage in high-stakes 3D battles against AI opponents. The arena features dynamic perspective, speed-based turn logic, and real-time damage feedback.
 -   **Authentication**: Secure user accounts with Sign Up, Sign In, and Logout functionality (JWT + bcrypt).
 -   **Responsive Design**: Fully responsive UI for Desktop and Mobile.
--   **Custom Theming**: Unique "Pokemon Arena" branding with custom fonts ("Pocket Monk") and dynamic UI elements.
+-   **Custom Theming**: Unique "Pokemon Arena" branding with custom fonts ("Pocket Monk") and a **Pokeball vs. Ultra Ball theme toggle** for light and dark modes.
 
 ## 🛠️ Tech Stack
 
@@ -75,7 +75,7 @@ npm run server
 **Terminal 2 (Frontend):**
 ```bash
 npm run dev
-# Runs on http://localhost:5173 (proxies API calls to port 3000)
+# Runs on http://localhost:8080 (proxies API calls to port 3000)
 ```
 
 For **Production Test** (Simulating deployment):

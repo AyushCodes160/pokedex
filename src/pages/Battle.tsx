@@ -35,7 +35,7 @@ export default function Battle() {
   const [player, setPlayer] = useState<BattlePokemon | null>(null);
   const [opponent, setOpponent] = useState<BattlePokemon | null>(null);
   const [log, setLog] = useState<BattleLogEntry[]>([]);
-  const [isPlayerTurn, setIsPlayerTurn] = useState(true);
+
   const [winner, setWinner] = useState<'player' | 'opponent' | null>(null);
   const [loading, setLoading] = useState(false);
   const [animating, setAnimating] = useState(false);
@@ -125,7 +125,7 @@ export default function Battle() {
       addLog(`Go, ${capitalize(p.name)}!`);
 
       // Speed determines first turn
-      setIsPlayerTurn(p.stats.speed >= o.stats.speed);
+
       setPhase('battle');
     } catch (err) {
       console.error(err);
@@ -133,72 +133,76 @@ export default function Battle() {
     setLoading(false);
   };
 
-  const executeMove = async (move: BattleMove) => {
-    if (!player || !opponent || animating || !isPlayerTurn) return;
+  const executeMove = async (playerMove: BattleMove) => {
+    if (!player || !opponent || animating || phase !== 'battle') return;
     setAnimating(true);
 
-    // Reduce PP
-    move.pp--;
-
-    // Player status check
-    const pStatus = applyStatusEffects(player);
-    pStatus.messages.forEach(m => addLog(m, 'status'));
-    if (player.currentHp <= 0) { handleFaint('player'); setAnimating(false); return; }
-
-    if (pStatus.canMove) {
-      addLog(`${capitalize(player.name)} used ${capitalize(move.name.replace('-', ' '))}!`, 'info');
-      const result = calculateDamage(player, opponent, move);
-      opponent.currentHp = Math.max(0, opponent.currentHp - result.damage);
-
-      if (result.damage > 0) {
-        setDamagePopup({ value: result.damage, effectiveness: result.effectiveness, side: 'opponent' });
-        setTimeout(() => setDamagePopup(null), 1000);
-      }
-
-      result.messages.forEach(m => { if (m) addLog(m, result.effectiveness > 1 ? 'damage' : 'info'); });
-      if (result.damage > 0) addLog(`${capitalize(opponent.name)} took ${result.damage} damage!`, 'damage');
-
-      setOpponent({ ...opponent });
-
-      if (opponent.currentHp <= 0) {
-        handleFaint('opponent');
-        setAnimating(false);
-        return;
-      }
-    }
-
-    // Opponent turn
-    await new Promise(r => setTimeout(r, 800));
-
-    const oStatus = applyStatusEffects(opponent);
-    oStatus.messages.forEach(m => addLog(m, 'status'));
-    if (opponent.currentHp <= 0) { handleFaint('opponent'); setAnimating(false); return; }
-
-    if (oStatus.canMove) {
+    try {
       const aiMove = getAiMove(opponent, player);
-      aiMove.pp--;
-      addLog(`${capitalize(opponent.name)} used ${capitalize(aiMove.name.replace('-', ' '))}!`, 'info');
-      const aiResult = calculateDamage(opponent, player, aiMove);
-      player.currentHp = Math.max(0, player.currentHp - aiResult.damage);
+      const playerFirst = player.stats.speed >= opponent.stats.speed;
 
-      if (aiResult.damage > 0) {
-        setDamagePopup({ value: aiResult.damage, effectiveness: aiResult.effectiveness, side: 'player' });
-        setTimeout(() => setDamagePopup(null), 1000);
+      const sequence = playerFirst
+        ? [
+          { attacker: player, defender: opponent, move: playerMove, side: 'player' as const },
+          { attacker: opponent, defender: player, move: aiMove, side: 'opponent' as const }
+        ]
+        : [
+          { attacker: opponent, defender: player, move: aiMove, side: 'opponent' as const },
+          { attacker: player, defender: opponent, move: playerMove, side: 'player' as const }
+        ];
+
+      for (let i = 0; i < sequence.length; i++) {
+        const { attacker, defender, move, side } = sequence[i];
+
+        if (attacker.currentHp <= 0 || defender.currentHp <= 0) break;
+
+        // Reduce PP
+        move.pp--;
+
+        // Status check
+        const status = applyStatusEffects(attacker);
+        status.messages.forEach(m => addLog(m, 'status'));
+
+        // Update state after status damage
+        if (side === 'player') setPlayer({ ...player });
+        else setOpponent({ ...opponent });
+
+        if (attacker.currentHp <= 0) {
+          handleFaint(side);
+          break;
+        }
+
+        if (status.canMove) {
+          addLog(`${capitalize(attacker.name)} used ${capitalize(move.name.replace('-', ' '))}!`, 'info');
+          const result = calculateDamage(attacker, defender, move);
+          defender.currentHp = Math.max(0, defender.currentHp - result.damage);
+
+          if (result.damage > 0) {
+            setDamagePopup({ value: result.damage, effectiveness: result.effectiveness, side: side === 'player' ? 'opponent' : 'player' });
+            setTimeout(() => setDamagePopup(null), 1000);
+          }
+
+          result.messages.forEach(m => { if (m) addLog(m, result.effectiveness > 1 ? 'damage' : 'info'); });
+          if (result.damage > 0) addLog(`${capitalize(defender.name)} took ${result.damage} damage!`, 'damage');
+
+          // Update state after hit
+          if (side === 'player') setOpponent({ ...opponent });
+          else setPlayer({ ...player });
+
+          if (defender.currentHp <= 0) {
+            handleFaint(side === 'player' ? 'opponent' : 'player');
+            break;
+          }
+        }
+
+        // Delay between moves or after final move to let animations finish
+        await new Promise(r => setTimeout(r, 1200));
       }
-
-      aiResult.messages.forEach(m => { if (m) addLog(m, aiResult.effectiveness > 1 ? 'damage' : 'info'); });
-      if (aiResult.damage > 0) addLog(`${capitalize(player.name)} took ${aiResult.damage} damage!`, 'damage');
-
-      setPlayer({ ...player });
-
-      if (player.currentHp <= 0) {
-        handleFaint('player');
-        setAnimating(false);
-        return;
-      }
+    } catch (err) {
+      console.error("Battle error:", err);
+    } finally {
+      setAnimating(false);
     }
-
-    setAnimating(false);
   };
 
   const saveBattleResult = async (result: 'win' | 'loss', p: BattlePokemon, o: BattlePokemon) => {
@@ -403,7 +407,7 @@ export default function Battle() {
                       setWinner(null);
                       addLog(`Battling with team: ${team.name}`);
                       addLog(`A wild ${capitalize(o.name)} appeared!`);
-                      setIsPlayerTurn(p.stats.speed >= o.stats.speed);
+
                       setPhase('battle');
                       setLoading(false);
                     }}

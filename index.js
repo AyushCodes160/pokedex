@@ -19,22 +19,15 @@ const SECRET_KEY = process.env.SECRET_KEY || "super-secret-pokemon-key";
 
 app.use(cors());
 
-// Middleware
-app.use(express.static('dist')); // Serve Vite build
-app.use(express.static('public')); // Fallback for any separate public assets if needed
+app.use(express.static('dist'));
+app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ... (Ping endpoint) ...
-
-// SPA Fallback (Put this LAST, after all API routes)
-
-// Simple Ping Endpoint for Keep-Alive
 app.get('/api/ping', (req, res) => {
   res.send('PONG');
 });
 
-// Email Configuration (Ethereal)
 let transporter;
 
 async function createTestAccount() {
@@ -42,10 +35,10 @@ async function createTestAccount() {
   transporter = nodemailer.createTransport({
     host: "smtp.ethereal.email",
     port: 587,
-    secure: false, // true for 465, false for other ports
+    secure: false,
     auth: {
-      user: testAccount.user, // generated ethereal user
-      pass: testAccount.pass, // generated ethereal password
+      user: testAccount.user,
+      pass: testAccount.pass,
     },
   });
 }
@@ -54,19 +47,16 @@ async function sendEmail(to, subject, text, html) {
   if (!transporter) return;
   
   const info = await transporter.sendMail({
-    from: '"Pokemon Trainer" <ash@pokedex.com>', // sender address
-    to: to, // list of receivers
-    subject: subject, // Subject line
-    text: text, // plain text body
-    html: html, // html body
+    from: '"Pokemon Trainer" <ash@pokedex.com>',
+    to: to,
+    subject: subject,
+    text: text,
+    html: html,
   });
 
   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 }
 
-// Auth Routes
-
-// Signup Endpoint
 app.post('/api/signup', async (req, res) => {
   const { email, password, name } = req.body;
   
@@ -91,7 +81,6 @@ app.post('/api/signup', async (req, res) => {
       }
     });
 
-    // Send Verification Email
     const verificationLink = `http://localhost:3000/api/verify-email?token=${verificationToken}`;
     await sendEmail(email, "Verify your Pokemon Account", 
       `Click here to verify: ${verificationLink}`,
@@ -108,6 +97,9 @@ app.post('/api/signup', async (req, res) => {
 });
 
 // Login Endpoint
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -135,7 +127,6 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Verify Email Endpoint
 app.get('/api/verify-email', async (req, res) => {
   const { token } = req.query;
 
@@ -154,14 +145,13 @@ app.get('/api/verify-email', async (req, res) => {
       data: { isVerified: true, verificationToken: null }
     });
 
-    res.send("<h1>Email Verified!</h1><p>You can now close this tab and login.</p>"); // Simple response
+    res.send("<h1>Email Verified!</h1><p>You can now close this tab and login.</p>");
   } catch (error) {
     console.error("Verification error:", error);
     res.status(500).send("Internal server error");
   }
 });
 
-// Forgot Password Endpoint
 app.post('/api/forgot-password', async (req, res) => {
   const { email } = req.body;
 
@@ -172,19 +162,18 @@ app.post('/api/forgot-password', async (req, res) => {
   try {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      // Security: Don't reveal if user exists
       return res.json({ message: "If that email exists, we sent a reset link." });
     }
 
     const resetToken = uuidv4();
-    const expiry = new Date(Date.now() + 3600000); // 1 hour
+    const expiry = new Date(Date.now() + 3600000);
 
     await prisma.user.update({
       where: { id: user.id },
       data: { resetToken, resetTokenExpiry: expiry }
     });
 
-    const resetLink = `http://localhost:3000/auth.html?resetToken=${resetToken}`; // Direct to frontend handling
+    const resetLink = `http://localhost:3000/auth.html?resetToken=${resetToken}`;
     await sendEmail(email, "Reset your Password", 
       `Click here to reset: ${resetLink}`,
       `<p>Forgot your password?</p><p><a href="${resetLink}">Click here</a> to reset it.</p>`
@@ -198,7 +187,6 @@ app.post('/api/forgot-password', async (req, res) => {
   }
 });
 
-// Reset Password Endpoint
 app.post('/api/reset-password', async (req, res) => {
   const { token, newPassword } = req.body;
 
@@ -210,7 +198,7 @@ app.post('/api/reset-password', async (req, res) => {
     const user = await prisma.user.findFirst({
       where: {
         resetToken: token,
-        resetTokenExpiry: { gt: new Date() } // Not expired
+        resetTokenExpiry: { gt: new Date() }
       }
     });
 
@@ -232,11 +220,6 @@ app.post('/api/reset-password', async (req, res) => {
   }
 });
 
-// Teams API
-app.get('/api/teams', async (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) return res.status(401).json({ error: "Unauthorized" });
-  
   try {
     const decoded = jwt.verify(token, SECRET_KEY);
     const teams = await prisma.savedTeam.findMany({ 
@@ -303,6 +286,15 @@ app.get('/api/battles', async (req, res) => {
         const history = await prisma.battleHistory.findMany({
             where: { user_id: decoded.userId },
             orderBy: { createdAt: 'desc' }
+app.get('/api/battles', async (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const history = await prisma.battleHistory.findMany({
+            where: { user_id: decoded.userId },
+            orderBy: { createdAt: 'desc' }
         });
         res.json(history);
     } catch (error) {
@@ -335,12 +327,10 @@ app.post('/api/battles', async (req, res) => {
     }
 });
 
-// SPA Fallback
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api')) {
       return res.status(404).json({ error: "API endpoint not found" });
   }
-  // If it's auth.html, serve it (should be covered by static 'dist' but explicit check doesn't hurt)
   if (req.path === '/auth.html') {
       return res.sendFile(path.join(__dirname, 'dist', 'auth.html'));
   }
@@ -351,7 +341,6 @@ createTestAccount().then(() => {
   app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
     
-    // Self-ping to keep Render awake prevents spin-down
     if (process.env.RENDER_EXTERNAL_URL) {
       const pingUrl = `${process.env.RENDER_EXTERNAL_URL}/api/ping`;
       console.log(`Setting up keep-alive ping for: ${pingUrl}`);
@@ -360,7 +349,4 @@ createTestAccount().then(() => {
         axios.get(pingUrl)
           .then(() => console.log(`Keep-alive ping successful: ${new Date().toISOString()}`))
           .catch(err => console.error(`Keep-alive ping failed: ${err.message}`));
-      }, 14 * 60 * 1000); // Ping every 14 minutes
-    }
-  });
-});
+      }, 14 * 60 * 1000);

@@ -87,7 +87,7 @@ app.post('/api/signup', async (req, res) => {
       `<p>Welcome Trainer!</p><p>Please <a href="${verificationLink}">click here</a> to verify your account.</p>`
     );
 
-    const token = jwt.sign({ userId: user.id }, SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user.id }, SECRET_KEY, { expiresIn: '7d' });
     res.json({ message: "Signup successful. Verification email sent!", token, user: { id: user.id, email: user.email, name: user.name } });
 
   } catch (error) {
@@ -97,9 +97,6 @@ app.post('/api/signup', async (req, res) => {
 });
 
 // Login Endpoint
-app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body;
-
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -118,7 +115,7 @@ app.post('/api/login', async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ userId: user.id }, SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user.id }, SECRET_KEY, { expiresIn: '7d' });
     res.json({ message: "Login successful", token, user: { id: user.id, email: user.email, name: user.name } });
 
   } catch (error) {
@@ -219,6 +216,10 @@ app.post('/api/reset-password', async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+app.get('/api/teams', async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ error: "Unauthorized" });
 
   try {
     const decoded = jwt.verify(token, SECRET_KEY);

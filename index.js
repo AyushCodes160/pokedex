@@ -277,15 +277,7 @@ app.delete('/api/teams/:id', async (req, res) => {
 });
 
 // Battle History API
-app.get('/api/battles', async (req, res) => {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) return res.status(401).json({ error: "Unauthorized" });
 
-    try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        const history = await prisma.battleHistory.findMany({
-            where: { user_id: decoded.userId },
-            orderBy: { createdAt: 'desc' }
 app.get('/api/battles', async (req, res) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) return res.status(401).json({ error: "Unauthorized" });
@@ -350,3 +342,6 @@ createTestAccount().then(() => {
           .then(() => console.log(`Keep-alive ping successful: ${new Date().toISOString()}`))
           .catch(err => console.error(`Keep-alive ping failed: ${err.message}`));
       }, 14 * 60 * 1000);
+    }
+  });
+});

@@ -14,7 +14,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const prisma = new PrismaClient();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 80;
 const SECRET_KEY = process.env.SECRET_KEY || "super-secret-pokemon-key";
 
 app.use(cors());

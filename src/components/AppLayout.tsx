@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, BookOpen, Swords, Users, LogIn, LogOut } from 'lucide-react';
+import { Home, BookOpen, Swords, Users, LogIn, LogOut, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -9,6 +9,7 @@ import { FloatingBackground } from './FloatingBackground';
 const navItems = [
   { to: '/', icon: Home, label: 'Home' },
   { to: '/pokedex', icon: BookOpen, label: 'Pokédex' },
+  { to: '/moves', icon: Search, label: 'Moves' },
   { to: '/team-builder', icon: Users, label: 'Teams' },
   { to: '/battle', icon: Swords, label: 'Battle' },
 ];

@@ -129,6 +129,114 @@ export async function fetchMoveDetails(moveName: string): Promise<{
   };
 }
 
+export async function fetchAllMoveNames(): Promise<string[]> {
+  const data: any = await cachedGet(`${API_BASE}/move?limit=2000`);
+  return data.results.map((m: any) => m.name);
+}
+
+export interface MoveLearner extends PokemonBasic {
+  level?: number;
+  method: string;
+}
+
+export interface MoveLearnersResult {
+  move: {
+    name: string;
+    type: string;
+    category: string;
+    power: number | null;
+    accuracy: number | null;
+    pp: number;
+    effect: string;
+  };
+  levelUp: MoveLearner[];
+  machine: MoveLearner[];
+  other: MoveLearner[];
+}
+
+export async function fetchMoveLearners(moveName: string): Promise<MoveLearnersResult> {
+  const data: any = await cachedGet(`${API_BASE}/move/${moveName}`);
+  const effectEntry = data.effect_entries?.find((e: any) => e.language.name === 'en');
+
+  const move = {
+    name: moveName,
+    type: data.type?.name || 'normal',
+    category: data.damage_class?.name || 'status',
+    power: data.power,
+    accuracy: data.accuracy,
+    pp: data.pp,
+    effect: effectEntry?.short_effect?.replace(/\$effect_chance/g, String(data.effect_chance ?? '')) || '',
+  };
+
+  const learners: { name: string; url: string }[] = data.learned_by_pokemon || [];
+
+  const detailed = await Promise.all(
+    learners.map(async (l) => {
+      try {
+        const pokemonData: any = await cachedGet(l.url);
+        const moveData = pokemonData.moves.find((m: any) => m.move.name === moveName);
+        if (!moveData) return null;
+
+        const methods = new Set<string>();
+        let minLevel: number | null = null;
+        for (const detail of moveData.version_group_details || []) {
+          const m = detail.move_learn_method?.name;
+          if (!m) continue;
+          methods.add(m);
+          if (m === 'level-up') {
+            const lvl = detail.level_learned_at ?? 0;
+            if (minLevel === null || (lvl > 0 && lvl < minLevel) || minLevel === 0) {
+              minLevel = lvl;
+            }
+          }
+        }
+
+        const basic: PokemonBasic = {
+          id: pokemonData.id,
+          name: pokemonData.name
+            .split('-')
+            .map((s: string) => s.charAt(0).toUpperCase() + s.slice(1))
+            .join(' '),
+          types: pokemonData.types.map((t: any) => t.type.name),
+          sprite: pokemonData.sprites.front_default || '',
+          artwork:
+            pokemonData.sprites.other?.['official-artwork']?.front_default ||
+            pokemonData.sprites.front_default ||
+            '',
+        };
+
+        return { basic, methods: Array.from(methods), level: minLevel ?? 0 };
+      } catch {
+        return null;
+      }
+    })
+  );
+
+  const levelUp: MoveLearner[] = [];
+  const machine: MoveLearner[] = [];
+  const other: MoveLearner[] = [];
+
+  for (const d of detailed) {
+    if (!d) continue;
+    if (d.methods.includes('level-up')) {
+      levelUp.push({ ...d.basic, level: d.level, method: 'level-up' });
+    }
+    if (d.methods.includes('machine')) {
+      machine.push({ ...d.basic, method: 'machine' });
+    }
+    const otherMethods = d.methods.filter((m) => m !== 'level-up' && m !== 'machine');
+    if (otherMethods.length > 0) {
+      other.push({ ...d.basic, method: otherMethods[0] });
+    }
+  }
+
+  levelUp.sort((a, b) => (a.level ?? 0) - (b.level ?? 0) || a.id - b.id);
+  machine.sort((a, b) => a.id - b.id);
+  other.sort((a, b) => a.id - b.id);
+
+  return { move, levelUp, machine, other };
+}
+
 export async function searchPokemon(query: string): Promise<PokemonBasic[]> {
   const q = query.toLowerCase().trim();
   if (!q) return [];
